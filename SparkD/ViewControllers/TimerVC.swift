@@ -122,9 +122,10 @@ class TimerVC: UIViewController {
         
         timerRing.style = .ontop
         timerRing.innerRingWidth = 4
-        timerRing.innerRingColor = UIColor.systemPink
+        timerRing.innerRingColor = UIColor.gray
         timerRing.outerRingWidth = 4
-        timerRing.outerRingColor = UIColor.gray
+        timerRing.outerRingColor = UIColor.systemPink
+        timerRing.startAngle = 270
         timerRing.font = UIFont.systemFont(ofSize: 12)
         timerRing.startTimer(from: from, to: 15 * 60) { (state) in
             

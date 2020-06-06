@@ -62,5 +62,7 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Use camera for take a photo</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Use camera for scan photo</string>
 </dict>
 </plist>

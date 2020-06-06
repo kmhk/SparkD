@@ -8,5 +8,6 @@ target 'SparkD' do
   # Pods for SparkD
 
   pod 'TOPasscodeViewController'
+  pod 'SCRecorder'
 
 end

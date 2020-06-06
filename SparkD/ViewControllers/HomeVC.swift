@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import SCRecorder
 
 class HomeVC: UIViewController {
+    
+    var recorder = SCRecorder()
+    var capturedImageView: UIImageView?
 
     @IBOutlet weak var timerContainer: UIView!
     
@@ -122,9 +126,10 @@ class HomeVC: UIViewController {
         
         timerRing.style = .ontop
         timerRing.innerRingWidth = 4
-        timerRing.innerRingColor = UIColor.systemPink
+        timerRing.innerRingColor = UIColor.gray
         timerRing.outerRingWidth = 4
-        timerRing.outerRingColor = UIColor.gray
+        timerRing.outerRingColor = UIColor.systemPink
+        timerRing.startAngle = 270
         timerRing.font = UIFont.systemFont(ofSize: 12)
         timerRing.startTimer(from: from, to: 15 * 60) { (state) in
             
@@ -161,9 +166,10 @@ class HomeVC: UIViewController {
     }
     
     @IBAction func btnScanTapped(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "ScanVC")
-        tabBarController?.navigationController?.pushViewController(vc, animated: true)
+        tabBarController?.navigationController?.pushViewController(vc, animated: true)*/
+        showCamera()
     }
     
     @IBAction func btnRecentTimerViewAllTapped(_ sender: Any) {
@@ -172,5 +178,102 @@ class HomeVC: UIViewController {
     
     @IBAction func btnLastReportViewAllTapped(_ sender: Any) {
         tabBarController?.selectedIndex = 2
+    }
+}
+
+// MARK: -
+extension HomeVC: SCRecorderDelegate {
+    func showCamera() {
+        let bkView = UIView(frame: (tabBarController?.navigationController?.view.bounds)!)
+        bkView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+        bkView.tag = 0x1000
+        tabBarController?.navigationController?.view.addSubview(bkView)
+        
+        let containerView = UIView(frame: CGRect(x: 20,
+                                                 y: 60,
+                                                 width: bkView.frame.width - 40,
+                                                 height: bkView.frame.height - 120))
+        containerView.backgroundColor = UIColor.white
+        containerView.layer.cornerRadius = 8
+        containerView.clipsToBounds = true
+        bkView.addSubview(containerView)
+        
+        let btnClose = UIButton(frame: CGRect(x: containerView.frame.width - 45, y: 5, width: 40, height: 40))
+        btnClose.addTarget(self, action: #selector(btnCloseTapped(_:)), for: .touchUpInside)
+        btnClose.setTitle("X", for: .normal)
+        btnClose.setTitleColor(UIColor.darkGray, for: .normal)
+        containerView.addSubview(btnClose)
+        
+        let lblNote = UILabel(frame: CGRect(x: 15, y: 5, width: 50, height: 40))
+        lblNote.text = "Scan"
+        lblNote.font = UIFont.systemFont(ofSize: 14.0)
+        containerView.addSubview(lblNote)
+        
+        let cameraView = UIView(frame: CGRect(x: 40, y: 50, width: containerView.frame.width - 80, height: containerView.frame.height - 180))
+        cameraView.backgroundColor = UIColor.black
+        containerView.addSubview(cameraView)
+        
+        capturedImageView = UIImageView(frame: cameraView.frame)
+        containerView.addSubview(capturedImageView!)
+        capturedImageView!.isHidden = true
+        
+        initRecorder(preview: cameraView)
+        
+        let dashBorder = CAShapeLayer()
+        dashBorder.strokeColor = UIColor.systemBlue.cgColor
+        dashBorder.lineDashPattern = [3, 3]
+        dashBorder.frame = cameraView.bounds
+        dashBorder.fillColor = nil
+        dashBorder.path = UIBezierPath(rect: cameraView.bounds).cgPath
+        cameraView.layer.addSublayer(dashBorder)
+        
+        let btnTakePicture = UIButton(frame: CGRect(x: cameraView.frame.midX - 60, y: containerView.frame.height - 115, width: 120, height: 36))
+        btnTakePicture.setAttributedTitle(NSAttributedString(string: "TAKE PICTURE",
+                                                             attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                          NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnTakePicture.backgroundColor = UIColor.darkGray
+        btnTakePicture.addTarget(self, action: #selector(btnTakePictureTapped(_:)), for: .touchUpInside)
+        containerView.addSubview(btnTakePicture)
+        
+        let lblStep = UILabel(frame: CGRect(x: cameraView.frame.midX - 36, y: containerView.frame.height - 70, width: 72, height: 30))
+        lblStep.text = "Step 1/3"
+        lblStep.textAlignment = .center
+        lblStep.font = UIFont.systemFont(ofSize: 14.0)
+        containerView.addSubview(lblStep)
+        
+    }
+    
+    func initRecorder(preview: UIView) {
+        recorder.videoConfiguration.size = preview.bounds.size
+        recorder.previewView = preview
+        
+        recorder.captureSessionPreset = SCRecorderTools.bestCaptureSessionPresetCompatibleWithAllDevices()
+        recorder.device = .back
+        recorder.delegate = self
+        
+        recorder.session = SCRecordSession()
+        recorder.session!.fileType = AVFileType.jpg.rawValue
+        recorder.startRunning()
+    }
+    
+    // MARK: actions
+    @objc func btnCloseTapped(_ sender: Any) {
+        if let subView = tabBarController?.navigationController?.view.viewWithTag(0x1000) {
+            subView.removeFromSuperview()
+        }
+    }
+    
+    @objc func btnTakePictureTapped(_ sender: Any) {
+        recorder.capturePhoto { (error, image) in
+            guard (error == nil && image != nil) else {
+                print("capture error \(error!.localizedDescription)")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.capturedImageView!.image = image
+                self.capturedImageView!.isHidden = false
+            }
+        }
     }
 }
