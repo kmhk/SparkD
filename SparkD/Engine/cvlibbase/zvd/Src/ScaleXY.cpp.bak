@@ -1,0 +1,439 @@
+/*!
+ * \file
+ * \brief 
+ * \author
+ */
+#include <assert.h>
+#include "ipCoreABC.h"
+
+namespace cvlib
+{
+
+
+class ScaleXY
+{
+public:
+	//! Construction and Destruction
+	ScaleXY ();
+    virtual ~ScaleXY();
+
+	//! Operations
+	void Process (Mat* pDst, int nXOrgDst, int nYOrgDst, int nWidthDst, int nHeightDst,
+			  const Mat* pSrc, int nXOrgSrc, int nYOrgSrc, int nWidthSrc, int nHeightSrc);
+	void Process (Mat* pDst, const Mat* pSrc);
+
+	void FastProcess (const Mat* pmatSrc, Mat* pmatDest);
+	double BilinearInterpolation ( uchar** ppbImage, int nX, int nY, double rX, double rY );
+	double BilinearInterpolation ( float** pprImage, int nX, int nY, double rX, double rY );
+	Mat* Process (const Mat* pSrc, float rScale);
+};
+
+class ipScaleXY : public ipCorePump
+{
+	DECLARE_PUMP(ipScaleXY);
+public:
+	ipScaleXY(){}
+	ipScaleXY(int nWidth, int nHeight){m_newWidth=nWidth;m_newHeight=nHeight;}
+	virtual bool Process (Mat* pmSrc, Mat* pmDst = NULL);
+public:
+	int m_newWidth;
+	int m_newHeight;
+};
+
+ScaleXY::ScaleXY()
+{
+}
+
+ScaleXY::~ScaleXY()
+{
+}
+
+void	ScaleXY::Process (Mat* pDst, int nXOrgDst, int nYOrgDst, int nWidthDst, int nHeightDst,
+						  const Mat* pSrc, int nXOrgSrc, int nYOrgSrc, int nWidthSrc, int nHeightSrc)
+{
+	switch (pDst->type())
+	{
+	case MAT_Tbyte:
+		{
+			uchar** ppbDst = pDst->data.ptr;
+			uchar** ppbSrc = pSrc->data.ptr;
+			
+			int	iH, iW;
+			double	rHRate, rWRate;
+			
+			rHRate = (double)nHeightSrc / (double)nHeightDst;
+			rWRate = (double)nWidthSrc / (double)nWidthDst;
+			
+			int	nNewRow, nNewCol;
+			double	rA = 0.0f, rB = 0.0f;
+			for ( iH = 0; iH < nHeightDst; iH ++ )
+			{
+				double rHScale = rA;
+				nNewRow = ( int )rA;
+				if ( nNewRow < nHeightSrc - 1 )
+					rHScale -= nNewRow;
+				else
+					rHScale = 0.0f;
+				
+				rB = 0.0f;
+				for ( iW = 0; iW < nWidthDst; iW ++ )
+				{
+					double rWScale = rB;
+					nNewCol = ( int )rB;
+					if ( nNewCol < nWidthSrc - 1 )
+						rWScale -= nNewCol;
+					else
+						rWScale = 0.0f;
+					
+					ppbDst [iH + nYOrgDst][iW + nXOrgDst] = ( uchar )BilinearInterpolation (
+						ppbSrc, nNewCol + nXOrgSrc, nNewRow + nYOrgSrc, rWScale, rHScale );
+					rB += rWRate;
+				}
+				rA += rHRate;
+			}
+		}
+		break;
+	case MAT_Tfloat:
+		{
+			float** pprDst = pDst->data.fl;
+			float** pprSrc = pSrc->data.fl;
+			
+			int	iH, iW;
+			double	rHRate, rWRate;
+			
+			rHRate = (double)nHeightSrc / (double)nHeightDst;
+			rWRate = (double)nWidthSrc / (double)nWidthDst;
+			
+			int	nNewRow, nNewCol;
+			double	rA = 0.0f, rB = 0.0f;
+			for ( iH = 0; iH < nHeightDst; iH ++ )
+			{
+				double rHScale = rA;
+				nNewRow = ( int )rA;
+				if ( nNewRow < nHeightSrc - 1 )
+					rHScale -= nNewRow;
+				else
+					rHScale = 0.0f;
+				
+				rB = 0.0f;
+				for ( iW = 0; iW < nWidthDst; iW ++ )
+				{
+					double rWScale = rB;
+					nNewCol = ( int )rB;
+					if ( nNewCol < nWidthSrc - 1 )
+						rWScale -= nNewCol;
+					else
+						rWScale = 0.0f;
+					
+					pprDst [iH + nYOrgDst][iW + nXOrgDst] = ( uchar )BilinearInterpolation (
+						pprSrc, nNewCol + nXOrgSrc, nNewRow + nYOrgSrc, rWScale, rHScale );
+					rB += rWRate;
+				}
+				rA += rHRate;
+			}
+		}
+		break;
+        default:
+            assert (false);
+	}
+}
+
+double ScaleXY::BilinearInterpolation ( uchar** ppbImage, int nX, int nY, double rX, double rY )
+{
+	double	rTemp;
+
+	rTemp = ppbImage [ nY ][ nX ];
+	if ( rX )
+		rTemp += rX * ( ppbImage [ nY ][ nX + 1 ] - ppbImage [ nY ][ nX ] );
+
+	if ( rY )
+		rTemp += rY * ( ppbImage [ nY + 1 ][ nX ] - ppbImage [ nY ][ nX ] );
+
+	if ( rX && rY )
+		rTemp += rX * rY * (
+			ppbImage [ nY + 1 ][ nX + 1 ] + ppbImage [ nY ][ nX ] -
+			ppbImage [ nY ][ nX + 1 ] - ppbImage [ nY + 1 ][ nX ] );
+
+	return rTemp;
+}
+
+double ScaleXY::BilinearInterpolation ( float** pprImage, int nX, int nY, double rX, double rY )
+{
+	double	rTemp;
+	
+	rTemp = pprImage [ nY ][ nX ];
+	if ( rX )
+		rTemp += rX * ( pprImage [ nY ][ nX + 1 ] - pprImage [ nY ][ nX ] );
+	
+	if ( rY )
+		rTemp += rY * ( pprImage [ nY + 1 ][ nX ] - pprImage [ nY ][ nX ] );
+	
+	if ( rX && rY )
+		rTemp += rX * rY * (
+		pprImage [ nY + 1 ][ nX + 1 ] + pprImage [ nY ][ nX ] -
+		pprImage [ nY ][ nX + 1 ] - pprImage [ nY + 1 ][ nX ] );
+	
+	return rTemp;
+}
+
+void fastProcess_8u(const Mat* pmatSrc, Mat* pmatDest)
+{
+	assert (pmatSrc->type() == MAT_Tbyte);
+	assert (pmatDest->type() == MAT_Tbyte);
+	assert (pmatSrc->type1() == pmatDest->type1());
+
+	int	i, j, k;
+	int	ndstW=pmatDest->cols();
+	int	nShrink = pmatSrc->cols() / ndstW;
+	int	nRest = pmatSrc->cols() % ndstW;
+	int cn=pmatSrc->channels();
+	
+	for ( i = 0; i < pmatDest->rows(); i ++ )
+	{
+		int		nR, nNR;
+		int		nSkip = 0;
+		int		nShift = 0;
+		uchar	bNext;
+		
+		nR = i * pmatSrc->rows() / pmatDest->rows();
+		nNR = ( i + 1 ) * pmatSrc->rows() / pmatDest->rows();
+		if ( nNR - nR > 1 )
+			bNext = 1;
+		else
+			bNext = 0;
+		uchar*	pbSrc=pmatSrc->data.ptr[nR];
+		uchar*	pbSrcNext=pmatSrc->data.ptr[nR+bNext];
+		uchar*	pbDst=pmatDest->data.ptr[i];
+		if (cn==1)
+		{
+			for ( j = 0; j < ndstW; j ++ )
+			{
+				int	nC;
+				int	nSum;
+
+				nSkip += nRest;
+				nC = j * nShrink + nShift;
+				nSum = pbSrc[nC] + pbSrcNext[nC];
+				if ( nSkip >= ndstW )
+				{
+					nShift ++;
+					nSkip -= ndstW;
+					if (nC+1 < pmatSrc->cols())
+					{
+						nSum += pbSrc[nC+1] +pbSrcNext[nC+1];
+						nSum >>= 2;
+					}
+					else
+					{
+						nSum >>= 1;
+					}
+				}
+				else
+					nSum >>= 1;
+				pbDst[j] = ( uchar )nSum;
+			}
+		}
+		else
+		{
+			int pixel = 0;
+			for ( j = 0; j < ndstW; j ++) 
+			{
+				int	nC;
+				nSkip += nRest;
+				nC = j * nShrink + nShift;
+				if ( nSkip < ndstW )
+				{
+					int nC_cn = nC*cn;
+					for (k=0;k<cn;k++, pixel++, nC_cn++)
+					{
+						pbDst[pixel] = ( uchar )((pbSrc[nC_cn] + pbSrcNext[nC_cn]) >> 1);
+					}
+				}
+				else
+				{
+					int nC_cn = nC*cn;
+					if (nC_cn + cn < pmatSrc->cols()*cn)
+					{
+						for (k=0;k<cn;k++, pixel++, nC_cn++)
+						{
+							pbDst[pixel] = ( uchar )((pbSrc[nC_cn]+pbSrcNext[nC_cn]+pbSrc[nC_cn+cn]+pbSrcNext[nC_cn+cn])>>2);
+						}
+					}
+					else
+					{
+						for (k=0;k<cn;k++, pixel++, nC_cn++)
+						{
+							pbDst[pixel] = ( uchar )( ((int)(pbSrc[nC_cn]+pbSrcNext[nC_cn]))>>1);
+						}
+					}
+					nShift ++;
+					nSkip -= ndstW;
+				}
+			}
+		}
+	}
+}
+
+typedef void (*BilinearInterpolationFunc)(uchar** _dst, int x, int y, uchar** const _src, float rX, float rY, int channel);
+template<typename T> static void
+bilinearInterpolation_( uchar** _dst, int x, int y, uchar** const _src, float rX, float rY, int channel)
+{
+	T** const src=(T** const)_src;
+	T** dst=(T**)_dst;
+	int nX = (int)rX; rX -=  nX;
+	int nY = (int)rY; rY -=  nY;
+	int n=nX*channel;
+	int dstx=x*channel;
+    T* prcur=(T*)src [ nY ];
+    T* prnext=(T*)src [ nY+1 ];
+    T* pdst=(T*)dst[y];
+	for (int i=0; i<channel; i++, n++)
+	{
+		int n1=n+channel;
+		float rTemp = (float)prcur[ n ];
+
+		if ( rX )
+			rTemp += rX * (float)( prcur[n1] - prcur[n] );
+		if ( rY )
+			rTemp += rY * (float)( prnext[n] - prcur[n] );
+		if ( rX && rY )
+			rTemp += rX * rY * (float)(prnext[n1] + prcur[n] -prcur[n1] - prnext[n] );
+		pdst[dstx++]=(T)rTemp;
+	}
+}
+typedef void (*ResizeFunc)(uchar** const src, uchar** dst, Size srcsize, Size dstsize, int cn);
+template<typename T> static void
+resizeFunc_( uchar** const _src, uchar** _dst, Size srcsize, Size dstsize, int cn)
+{
+	T** const src=(T** const)_src;
+	T** dst=(T**)_dst;
+	double sx = (srcsize.width-1) / (double)(dstsize.width-1);
+	double sy = (srcsize.height-1) / (double)(dstsize.height-1);
+
+	int* pnx=new int[dstsize.width];
+	float* prx=new float[dstsize.width];
+
+	float xpos = 0.0f, ypos=0.0f;
+	for(int ix=0; ix<dstsize.width; ix++)
+	{
+		pnx[ix]=(int)xpos;
+		prx[ix]=xpos-pnx[ix];
+		pnx[ix] *= cn;
+		xpos += (float)sx;
+	}
+	for(int iy=0; iy<dstsize.height; iy++)
+	{
+		T* d=dst[iy];
+
+		int ny = (int)ypos;
+		float ry = ypos-ny;
+
+		T* s0 = src[ny];
+		T* s1 = ny == srcsize.height-1 ? src[ny] : src[ny+1];
+
+		for(int ix=0, iix=0; ix<dstsize.width; ix++ )
+		{
+			int n=pnx[ix];
+			if (ix != dstsize.width - 1){
+				int n1=n+cn;
+				float rx=prx[ix];
+				for (int ich=0; ich<cn; ich++, n++, n1++, iix++)
+				{
+					float rTemp = (float)s0[n];
+					if ( rx )
+						rTemp += rx * (float)( s0[n1] - s0[n] );
+					if ( ry )
+						rTemp += ry * (float)( s1[n] - s0[n] );
+					if ( rx && ry )
+						rTemp += rx * ry * (float)(s1[n1] + s0[n] -s0[n1] - s1[n] );
+					d[iix] = (T)rTemp;
+				}
+			}
+			else {
+				for (int ich=0; ich<cn; ich++, n++, iix++)
+					d[iix] = (T)s0[n];
+			}
+		}
+		ypos += (float)sy;
+	}
+	delete []pnx;
+	delete []prx;
+}
+void ScaleXY::FastProcess (const Mat* src, Mat* dst)
+{
+	if (src->type() == MAT_Tbyte || src->type() == MAT_Tchar)
+	{
+		fastProcess_8u (src, dst);
+		return;
+	}
+
+	ResizeFunc resizeFuncs[6]=
+	{0, 0, resizeFunc_<short>, resizeFunc_<int>, resizeFunc_<float>, resizeFunc_<double> };
+	ResizeFunc func = resizeFuncs[src->type()];
+	func (src->data.ptr, dst->data.ptr, src->size(), dst->size(), src->channels());
+}
+
+void ScaleXY::Process (Mat* pDst, const Mat* pSrc)
+{
+	Process(pDst, 0, 0, pDst->cols(), pDst->rows(),
+		pSrc, 0, 0, pSrc->cols(), pSrc->rows());
+}
+
+Mat* ScaleXY::Process (const Mat* pSrc, float rScale)
+{
+	Mat* pDst = new Mat( (int)(pSrc->rows() * rScale + 0.5f), (int)(pSrc->cols() * rScale + 0.5f), MAT_Tbyte);
+	Process(pDst, pSrc);
+	return pDst;
+}
+
+IMPLEMENT_PUMP(ipScaleXY, ipCorePump)
+
+bool ipScaleXY::Process (Mat* pmSrc, Mat* pmDst /*= NULL*/)
+{
+	ScaleXY scaler;
+	if (pmDst)
+	{
+		pmDst->release();
+		pmDst->create (m_newHeight, m_newWidth, pmSrc->type());
+		scaler.FastProcess(pmSrc, pmDst);
+	}
+	else
+	{
+		Mat mTemp(*pmSrc);
+		pmSrc->release();
+		pmSrc->create (m_newHeight, m_newWidth, mTemp.type());
+		scaler.FastProcess(&mTemp, pmSrc);
+	}
+	return true;
+}
+
+namespace ip
+{
+
+CVLIB_DECLSPEC void resize(const Mat& src, Mat& dst, int newx, int newy)
+{
+	dst.create (newy, newx, src.type1());
+	ScaleXY scaler;
+	scaler.FastProcess(&src, &dst);
+}
+CVLIB_DECLSPEC void resize(const Mat& src, Mat& dst, float rate)
+{
+	int newx=(int)(src.cols()*rate+0.5f);
+	int newy=(int)(src.rows()*rate+0.5f);
+	resize(src, dst, newx, newy);
+}
+CVLIB_DECLSPEC void resize(Mat& src, int newx, int newy)
+{
+	Mat dst = src;
+	src.create (newy, newx, dst.type1());
+	ScaleXY scaler;
+	scaler.FastProcess(&dst, &src);
+}
+CVLIB_DECLSPEC void resize(Mat& src, float rate)
+{
+	int newx=(int)(src.cols()*rate+0.5f);
+	int newy=(int)(src.rows()*rate+0.5f);
+	resize(src, newx, newy);
+}
+
+}}

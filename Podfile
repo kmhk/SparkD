@@ -9,5 +9,6 @@ target 'SparkD' do
 
   pod 'TOPasscodeViewController'
   pod 'SCRecorder'
+  pod 'VIPhotoView', '~> 0.1'
 
 end

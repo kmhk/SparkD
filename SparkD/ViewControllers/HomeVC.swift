@@ -13,7 +13,8 @@ class HomeVC: UIViewController {
     
     var recorder = SCRecorder()
     var capturedImageView: UIImageView?
-
+    let oldSlTestingView = SL_TestingView()
+    
     @IBOutlet weak var timerContainer: UIView!
     
     override func viewDidLoad() {
@@ -179,6 +180,12 @@ class HomeVC: UIViewController {
     @IBAction func btnLastReportViewAllTapped(_ sender: Any) {
         tabBarController?.selectedIndex = 2
     }
+    
+    func doRecognize(image: UIImage) {
+        var imageCount = 1
+        self.oldSlTestingView.mainProcess(image, true, Int32(imageCount))
+
+    }
 }
 
 // MARK: -
@@ -271,6 +278,7 @@ extension HomeVC: SCRecorderDelegate {
             }
             
             DispatchQueue.main.async {
+                self.doRecognize(image: image!)
                 self.capturedImageView!.image = image
                 self.capturedImageView!.isHidden = false
             }
