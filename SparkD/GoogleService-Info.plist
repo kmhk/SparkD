@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>127642304281-vavdmeklclb7a11m3sfi4epfmg6lhm6a.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.127642304281-vavdmeklclb7a11m3sfi4epfmg6lhm6a</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBqx5JXy9k2-sGc6EgJnMGEXl6Kl3Hy9uw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>127642304281</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>spark.SparkD</string>
+	<key>PROJECT_ID</key>
+	<string>sparkvd-images-developer</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sparkvd-images-developer.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:127642304281:ios:ea3efa82e5a3e13a098f88</string>
+	<key>DATABASE_URL</key>
+	<string>https://sparkvd-images-developer.firebaseio.com</string>
+</dict>
+</plist>

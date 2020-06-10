@@ -24,7 +24,8 @@ struct ReportItem {
     
     func getDict() -> [String: Any] {
         return ["id": id,
-                "time": timestamp.timeIntervalSinceNow,
+                "timestamp": timestamp.timeIntervalSinceNow,
+                "dbId": timestamp.timeIntervalSinceNow,
                 "title": title,
                 "result1": result1,
                 "result2": result2,

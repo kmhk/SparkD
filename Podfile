@@ -9,6 +9,8 @@ target 'SparkD' do
 
   pod 'TOPasscodeViewController'
   pod 'SCRecorder'
-  pod 'VIPhotoView', '~> 0.1'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Database'
+  pod 'ProgressHUD'
 
 end

@@ -8,6 +8,8 @@
 
 import UIKit
 import SCRecorder
+import Firebase
+import ProgressHUD
 
 class HomeVC: UIViewController {
     
@@ -19,8 +21,6 @@ class HomeVC: UIViewController {
     var btnCancel: UIButton?
     var lblStep: UILabel?
     
-    let oldSlTestingView = SL_TestingView()
-    
     var captureCount = 0
     
     @IBOutlet weak var timerContainer: UIView!
@@ -30,6 +30,14 @@ class HomeVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        Auth.auth().signIn(withEmail: "pritesh20@gmail.com", password: "pritesh20") { (auth, error) in
+            guard error == nil else {
+                print("error login to firebase with \(error!.localizedDescription)")
+                return
+            }
+            
+            print("logged in to the firebase successfully!")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,7 +96,7 @@ class HomeVC: UIViewController {
         let lblDate = UILabel(frame: CGRect(x: 170, y: 37, width: 167, height: 21))
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM, yyyy"
-        let date = Date(timeIntervalSinceNow: report["time"] as! TimeInterval)
+        let date = Date(timeIntervalSinceNow: report["timestamp"] as! TimeInterval)
         lblDate.text = formatter.string(from: date)
         lblDate.textAlignment = .right
         lblDate.textColor = .gray
@@ -245,11 +253,6 @@ class HomeVC: UIViewController {
         tabBarController?.selectedIndex = 2
     }
     
-    func doRecognize(image: UIImage) {
-        var imageCount = 1
-        self.oldSlTestingView.mainProcess(image, true, Int32(imageCount))
-
-    }
 }
 
 // MARK: -
@@ -383,13 +386,24 @@ extension HomeVC: SCRecorderDelegate {
                 // for testing
                 report.title = alert.textFields![0].text!
                 
-                DispatchQueue.main.async {
-                    self.btnCloseTapped(sender)
+                ProgressHUD.show()
+                
+                // save to firebase
+                let formatter = DateFormatter()
+                formatter.dateFormat = "YYYYMMDDHHmmss"
+                let tmpKey = formatter.string(from: report.timestamp)
+                
+                Database.database().reference().child("result").setValue([tmpKey: report.getDict()]) { (error, ref) in
+                    ProgressHUD.dismiss()
                     
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "ScanVC") as! ScanVC
-                    vc.reportData = report
-                    self.tabBarController?.navigationController?.pushViewController(vc, animated: true)
+                    DispatchQueue.main.async {
+                        self.btnCloseTapped(sender)
+                        
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let vc = storyboard.instantiateViewController(withIdentifier: "ScanVC") as! ScanVC
+                        vc.reportData = report
+                        self.tabBarController?.navigationController?.pushViewController(vc, animated: true)
+                    }
                 }
             }))
             self.present(alert, animated: true, completion: nil)

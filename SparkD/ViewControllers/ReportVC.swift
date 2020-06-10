@@ -102,7 +102,7 @@ extension ReportVC: UITableViewDataSource, UITableViewDelegate {
         
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM, yyyy"
-        let date = Date(timeIntervalSinceNow: report["time"] as! TimeInterval)
+        let date = Date(timeIntervalSinceNow: report["timestamp"] as! TimeInterval)
         cell.lblDate.text = formatter.string(from: date)
         
         if (report["selected"] as! Bool) == true {
