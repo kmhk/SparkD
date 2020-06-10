@@ -403,13 +403,30 @@ class UICircularRingLayer: CAShapeLayer {
         // Draws the text field
         
         // get text
-        let text = String(format: "%.2d:%.2d", Int((maxValue - value) / 60), Int(maxValue - value) % 60)
+        var attrText = NSMutableAttributedString()
+        
+        if ring.isKind(of: UICircularProgressRing.self) {
+            valueLabel.numberOfLines = 2
+            let text = String(format: "%.1f", value)
+            attrText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 54),
+                                                                            NSAttributedString.Key.foregroundColor: ring.fontColor])
+            let tmp = NSAttributedString(string: "\nng/mL", attributes: [NSAttributedString.Key.font: ring.font,
+                                                                         NSAttributedString.Key.foregroundColor: ring.fontColor])
+            attrText.append(tmp)
+            
+        } else {
+            valueLabel.numberOfLines = 1
+            let text = String(format: "%.2d:%.2d", Int((maxValue - value) / 60), Int(maxValue - value) % 60)
+            attrText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font: ring.font,
+                                                                     NSAttributedString.Key.foregroundColor: ring.fontColor])
+        }
         
         // Some basic label properties are set
         valueLabel.font = ring.font
         valueLabel.textAlignment = .center
         valueLabel.textColor = ring.fontColor
-        valueLabel.text = text//valueFormatter?.string(for: value)
+        //valueLabel.text = text//valueFormatter?.string(for: value)
+        valueLabel.attributedText = attrText
         ring.willDisplayLabel(label: valueLabel)
         valueLabel.sizeToFit()
 

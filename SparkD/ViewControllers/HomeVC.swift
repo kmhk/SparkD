@@ -12,10 +12,19 @@ import SCRecorder
 class HomeVC: UIViewController {
     
     var recorder = SCRecorder()
+    
     var capturedImageView: UIImageView?
+    var btnCapture: UIButton?
+    var btnNext: UIButton?
+    var btnCancel: UIButton?
+    var lblStep: UILabel?
+    
     let oldSlTestingView = SL_TestingView()
     
+    var captureCount = 0
+    
     @IBOutlet weak var timerContainer: UIView!
+    @IBOutlet weak var reportContainer: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +39,61 @@ class HomeVC: UIViewController {
         tabBarController?.navigationItem.titleView = titleView
         
         refreshTimers()
+        showLastReport()
+    }
+    
+    func showLastReport() {
+        var report = [String: Any]()
+        
+        guard let tmp = UserDefaults.standard.value(forKey: "ReportArray") else {
+            return
+        }
+        
+        let reports = tmp as! [Any]
+        
+        if reports.count == 0 {
+            return
+        }
+        
+        report = reports.last as! [String: Any]
+        
+        let reportView = UIView(frame: CGRect(x: 8, y: 44, width: view.frame.width - 16, height: 70))
+        reportView.backgroundColor = .white
+        reportView.layer.cornerRadius = 8
+        reportView.clipsToBounds = true
+        reportContainer.addSubview(reportView)
+        
+        let resultView = UILabel(frame: CGRect(x: 8, y: 14, width: 40, height: 40))
+        resultView.layer.borderWidth = 1
+        resultView.layer.borderColor = UIColor.systemBlue.cgColor
+        resultView.layer.cornerRadius = 4
+        resultView.backgroundColor = UIColor.lightGray
+        resultView.clipsToBounds = true
+        resultView.text = String(format: "%.f", report["average"] as! Double)
+        resultView.textAlignment = .center
+        resultView.font = UIFont.boldSystemFont(ofSize: 15)
+        reportView.addSubview(resultView)
+        
+        let lblName = UILabel(frame: CGRect(x: 72, y: 11, width: 256, height: 21))
+        lblName.text = report["title"] as? String
+        lblName.font = UIFont.systemFont(ofSize: 14)
+        reportView.addSubview(lblName)
+        
+        let lblState = UILabel(frame: CGRect(x: 72, y: 37, width: 92, height: 21))
+        lblState.text = "Good"
+        lblState.textColor = .systemBlue
+        lblState.font = UIFont.systemFont(ofSize: 13)
+        reportView.addSubview(lblState)
+        
+        let lblDate = UILabel(frame: CGRect(x: 170, y: 37, width: 167, height: 21))
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM, yyyy"
+        let date = Date(timeIntervalSinceNow: report["time"] as! TimeInterval)
+        lblDate.text = formatter.string(from: date)
+        lblDate.textAlignment = .right
+        lblDate.textColor = .gray
+        lblDate.font = UIFont.systemFont(ofSize: 13)
+        reportView.addSubview(lblDate)
     }
     
     func refreshTimers() {
@@ -133,7 +197,7 @@ class HomeVC: UIViewController {
         timerRing.startAngle = 270
         timerRing.font = UIFont.systemFont(ofSize: 12)
         timerRing.startTimer(from: from, to: 15 * 60) { (state) in
-            
+            // nothing process
         }
         
         return timer
@@ -191,6 +255,8 @@ class HomeVC: UIViewController {
 // MARK: -
 extension HomeVC: SCRecorderDelegate {
     func showCamera() {
+        captureCount = 0
+        
         let bkView = UIView(frame: (tabBarController?.navigationController?.view.bounds)!)
         bkView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
         bkView.tag = 0x1000
@@ -234,20 +300,37 @@ extension HomeVC: SCRecorderDelegate {
         dashBorder.path = UIBezierPath(rect: cameraView.bounds).cgPath
         cameraView.layer.addSublayer(dashBorder)
         
-        let btnTakePicture = UIButton(frame: CGRect(x: cameraView.frame.midX - 60, y: containerView.frame.height - 115, width: 120, height: 36))
-        btnTakePicture.setAttributedTitle(NSAttributedString(string: "TAKE PICTURE",
-                                                             attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
-                                                                          NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
-        btnTakePicture.backgroundColor = UIColor.darkGray
-        btnTakePicture.addTarget(self, action: #selector(btnTakePictureTapped(_:)), for: .touchUpInside)
-        containerView.addSubview(btnTakePicture)
+        btnCapture = UIButton(frame: CGRect(x: cameraView.frame.midX - 60, y: containerView.frame.height - 115, width: 120, height: 36))
+        btnCapture!.setAttributedTitle(NSAttributedString(string: "TAKE PICTURE",
+                                                         attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                      NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnCapture!.backgroundColor = UIColor.darkGray
+        btnCapture!.addTarget(self, action: #selector(btnTakePictureTapped(_:)), for: .touchUpInside)
+        containerView.addSubview(btnCapture!)
         
-        let lblStep = UILabel(frame: CGRect(x: cameraView.frame.midX - 36, y: containerView.frame.height - 70, width: 72, height: 30))
-        lblStep.text = "Step 1/3"
-        lblStep.textAlignment = .center
-        lblStep.font = UIFont.systemFont(ofSize: 14.0)
-        containerView.addSubview(lblStep)
+        lblStep = UILabel(frame: CGRect(x: cameraView.frame.midX - 36, y: containerView.frame.height - 70, width: 72, height: 30))
+        lblStep!.text = "Step 1/3"
+        lblStep!.textAlignment = .center
+        lblStep!.font = UIFont.systemFont(ofSize: 14.0)
+        containerView.addSubview(lblStep!)
         
+        btnNext = UIButton(frame: CGRect(x: cameraView.frame.midX - 90, y: containerView.frame.height - 115, width: 85, height: 36))
+        btnNext!.setAttributedTitle(NSAttributedString(string: "NEXT",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                    NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnNext!.backgroundColor = UIColor.darkGray
+        btnNext!.addTarget(self, action: #selector(btnNextTapped(_:)), for: .touchUpInside)
+        btnNext!.isHidden = true
+        containerView.addSubview(btnNext!)
+        
+        btnCancel = UIButton(frame: CGRect(x: cameraView.frame.midX + 5, y: containerView.frame.height - 115, width: 85, height: 36))
+        btnCancel!.setAttributedTitle(NSAttributedString(string: "CANCEL",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                    NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnCancel!.backgroundColor = UIColor.darkGray
+        btnCancel!.addTarget(self, action: #selector(btnCancelTapped(_:)), for: .touchUpInside)
+        btnCancel!.isHidden = true
+        containerView.addSubview(btnCancel!)
     }
     
     func initRecorder(preview: UIView) {
@@ -263,11 +346,76 @@ extension HomeVC: SCRecorderDelegate {
         recorder.startRunning()
     }
     
+    func detectImage(image: UIImage) {
+        // process detecting image
+        capturedImageView!.image = image
+        capturedImageView!.isHidden = false
+        
+        // show step
+        btnCapture!.isHidden = true
+        btnNext!.isHidden = false
+        btnCancel!.isHidden = false
+        
+        lblStep!.text = String(format: "Step %d/3", captureCount + 1)
+    }
+    
     // MARK: actions
     @objc func btnCloseTapped(_ sender: Any) {
         if let subView = tabBarController?.navigationController?.view.viewWithTag(0x1000) {
             subView.removeFromSuperview()
         }
+    }
+    
+    @objc func btnNextTapped(_ sender: Any) {
+        captureCount += 1
+        if captureCount >= 3 {
+            // show report screen
+            
+            let alert = UIAlertController(title: nil, message: "Result Title", preferredStyle: .alert)
+            
+            alert.addTextField { (textField) in
+                textField.placeholder = "Input Result Title"
+            }
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                var report = ReportItem()
+                
+                // for testing
+                report.title = alert.textFields![0].text!
+                
+                DispatchQueue.main.async {
+                    self.btnCloseTapped(sender)
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let vc = storyboard.instantiateViewController(withIdentifier: "ScanVC") as! ScanVC
+                    vc.reportData = report
+                    self.tabBarController?.navigationController?.pushViewController(vc, animated: true)
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+            
+            return
+        }
+        
+        capturedImageView!.isHidden = true
+        
+        // show step
+        btnCapture!.isHidden = false
+        btnNext!.isHidden = true
+        btnCancel!.isHidden = true
+        
+        lblStep!.text = String(format: "Step %d/3", captureCount + 1)
+    }
+    
+    @objc func btnCancelTapped(_ sender: Any) {
+        capturedImageView!.isHidden = true
+        
+        // show step
+        btnCapture!.isHidden = false
+        btnNext!.isHidden = true
+        btnCancel!.isHidden = true
+        
+        lblStep!.text = String(format: "%d/3", captureCount + 1)
     }
     
     @objc func btnTakePictureTapped(_ sender: Any) {
@@ -278,9 +426,7 @@ extension HomeVC: SCRecorderDelegate {
             }
             
             DispatchQueue.main.async {
-                self.doRecognize(image: image!)
-                self.capturedImageView!.image = image
-                self.capturedImageView!.isHidden = false
+                self.detectImage(image: image!)
             }
         }
     }

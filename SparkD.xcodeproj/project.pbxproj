@@ -163,6 +163,8 @@
 		F3315D742488A9B300867A9F /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3315D732488A9B300867A9F /* View.swift */; };
 		F3315D7624891CEC00867A9F /* TestProcedurePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3315D7524891CEC00867A9F /* TestProcedurePageVC.swift */; };
 		F3315D7C2489364A00867A9F /* TPDetailCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3315D7B2489364A00867A9F /* TPDetailCollectionCell.swift */; };
+		F33E1E4024901E390016E6C1 /* ReportItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33E1E3F24901E390016E6C1 /* ReportItem.swift */; };
+		F33E1E422490B4F00016E6C1 /* ReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33E1E412490B4EF0016E6C1 /* ReportTableViewCell.swift */; };
 		F3EAB65A248A03BE000A23B5 /* AddTimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAB659248A03BE000A23B5 /* AddTimerController.swift */; };
 		F3EDA6E924873AC0004425C3 /* LogoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EDA6E824873AC0004425C3 /* LogoVC.swift */; };
 		F3F6428324813A5700282EDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F6428224813A5700282EDC /* AppDelegate.swift */; };
@@ -463,6 +465,8 @@
 		F3315D732488A9B300867A9F /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		F3315D7524891CEC00867A9F /* TestProcedurePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProcedurePageVC.swift; sourceTree = "<group>"; };
 		F3315D7B2489364A00867A9F /* TPDetailCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPDetailCollectionCell.swift; sourceTree = "<group>"; };
+		F33E1E3F24901E390016E6C1 /* ReportItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportItem.swift; sourceTree = "<group>"; };
+		F33E1E412490B4EF0016E6C1 /* ReportTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableViewCell.swift; sourceTree = "<group>"; };
 		F3EAB659248A03BE000A23B5 /* AddTimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTimerController.swift; sourceTree = "<group>"; };
 		F3EDA6E824873AC0004425C3 /* LogoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoVC.swift; sourceTree = "<group>"; };
 		F3F6427F24813A5700282EDC /* SparkD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -899,8 +903,17 @@
 				F3315D7124889BE500867A9F /* TestProcedureCollectionViewCell.swift */,
 				F3315D7B2489364A00867A9F /* TPDetailCollectionCell.swift */,
 				F3EAB659248A03BE000A23B5 /* AddTimerController.swift */,
+				F33E1E412490B4EF0016E6C1 /* ReportTableViewCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		F33E1E3E24901E160016E6C1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F33E1E3F24901E390016E6C1 /* ReportItem.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		F345C148217D0DCE7F4ED172 /* Frameworks */ = {
@@ -934,6 +947,7 @@
 		F3F6428124813A5700282EDC /* SparkD */ = {
 			isa = PBXGroup;
 			children = (
+				F33E1E3E24901E160016E6C1 /* Data */,
 				D3F9548B248C1EB000413350 /* Engine */,
 				F3315D7024889BBA00867A9F /* Views */,
 				F3315D5F24881E7700867A9F /* Extensions */,
@@ -1086,6 +1100,7 @@
 				D30A84D5248C2CFD00B7F472 /* IntegralImage.cpp in Sources */,
 				F3315D742488A9B300867A9F /* View.swift in Sources */,
 				D30A8349248C2CEE00B7F472 /* SparseMat.cpp in Sources */,
+				F33E1E422490B4F00016E6C1 /* ReportTableViewCell.swift in Sources */,
 				D30A84EC248C2CFD00B7F472 /* objdetect_utils.cpp in Sources */,
 				D30A84E0248C2CFD00B7F472 /* Thresh.cpp in Sources */,
 				D30A83B9248C2CEE00B7F472 /* XFileMem.cpp in Sources */,
@@ -1102,6 +1117,7 @@
 				D30A7F9F248C2CED00B7F472 /* parallel.cpp in Sources */,
 				D30A84D6248C2CFD00B7F472 /* RegressorTrainer.cpp in Sources */,
 				F3EDA6E924873AC0004425C3 /* LogoVC.swift in Sources */,
+				F33E1E4024901E390016E6C1 /* ReportItem.swift in Sources */,
 				F3218617248AA2E300FC6EC9 /* UICircularProgressRing.swift in Sources */,
 				D30A809C248C2CED00B7F472 /* svd.cpp in Sources */,
 				D30A84E7248C2CFD00B7F472 /* warp_avx2.cpp in Sources */,
