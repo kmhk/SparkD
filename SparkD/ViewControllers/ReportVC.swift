@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class ReportVC: UIViewController {
     
@@ -59,7 +60,107 @@ class ReportVC: UIViewController {
     */
 
     @objc func exportBtnTapped(_ sender: Any) {
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, view.bounds, nil)
         
+        for report in reports {
+            let dict = (report as! [String: Any])
+            if (dict["selected"] as! Bool) == false {
+                continue
+            }
+            
+            let pdfView = UIView(frame: view.bounds)
+            pdfView.backgroundColor = .white
+            pdfView.layer.borderWidth = 3
+            pdfView.layer.borderColor = UIColor.black.cgColor
+            
+            let lblTitle = UILabel(frame: CGRect(x: 20, y: 0, width: view.frame.width - 40, height: 80))
+            lblTitle.text = "VITAMIN-D TEST REPORT"
+            lblTitle.font = UIFont.boldSystemFont(ofSize: 23)
+            pdfView.addSubview(lblTitle)
+            
+            let viewSep = UIView(frame: CGRect(x: 20, y: 80, width: view.frame.width - 40, height: 1))
+            viewSep.backgroundColor = .black
+            pdfView.addSubview(viewSep)
+            
+            let lblName = UILabel(frame: CGRect(x: 20, y: 85, width: view.frame.width - 40, height: 40))
+            lblName.text = "TEST REPORT TITLE:     \(dict["title"] as! String)"
+            lblName.font = UIFont.systemFont(ofSize: 17)
+            pdfView.addSubview(lblName)
+            
+            let lblDate = UILabel(frame: CGRect(x: 20, y: 125, width: view.frame.width - 40, height: 40))
+            lblDate.font = UIFont.systemFont(ofSize: 17)
+            pdfView.addSubview(lblDate)
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd MMM, yyyy"
+            let date = Date(timeIntervalSinceNow: dict["timestamp"] as! TimeInterval)
+            lblDate.text = "Date of Test:    \(formatter.string(from: date))"
+            
+            let lblResult = UILabel(frame: CGRect(x: 20, y: 165, width: view.frame.width - 40, height: 80))
+            lblResult.text = "RESULT"
+            lblResult.textAlignment = .center
+            lblResult.font = UIFont.boldSystemFont(ofSize: 23)
+            pdfView.addSubview(lblResult)
+            
+            let lblValue = UILabel(frame: CGRect(x: 20, y: 245, width: view.frame.width - 40, height: 40))
+            lblValue.text = "Vitamin-D (D2+D3), Total(1):     50.38 ng/ml"
+            lblValue.font = UIFont.systemFont(ofSize: 15)
+            pdfView.addSubview(lblValue)
+            
+            let lblRange = UILabel(frame: CGRect(x: 20, y: 300, width: view.frame.width - 40, height: 20))
+            lblRange.text = "REFERENCE RANGE(1):"
+            lblRange.font = UIFont.boldSystemFont(ofSize: 15)
+            pdfView.addSubview(lblRange)
+            
+            let lblRangeValue = UILabel(frame: CGRect(x: 20, y: 320, width: view.frame.width - 40, height: 20))
+            lblRange.text = "Desirable; 40 ng/ml - 80 ng/ml"
+            lblRange.font = UIFont.systemFont(ofSize: 15)
+            pdfView.addSubview(lblRangeValue)
+            
+            let lblNote = UILabel(frame: CGRect(x: 20, y: 370, width: view.frame.width - 40, height: 100))
+            lblNote.numberOfLines = 6
+            lblNote.font = UIFont.systemFont(ofSize: 13)
+            lblNote.text = "Note:\n(1) Measured from SPARK-D test, not an official laboratory report\n(2)Reference range derived from general recommended from Vitamin D Council guildelines"
+            pdfView.addSubview(lblNote)
+            
+            //self.view.addSubview(pdfView)
+            UIGraphicsBeginPDFPageWithInfo(pdfView.bounds, nil)
+            guard let pdfContext = UIGraphicsGetCurrentContext() else { continue }
+            pdfView.layer.render(in: pdfContext)
+        }
+        
+        UIGraphicsEndPDFContext()
+        
+        // save pdf to file
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYYMMDDHHmmss"
+        let date = Date(timeIntervalSinceNow: 0)
+        
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let docDirectoryPath = paths[0]
+        let pdfPath = docDirectoryPath.appendingPathComponent("\(formatter.string(from: date)).pdf")
+        if pdfData.write(to: pdfPath, atomically: true) {
+            print("saved pdf to \(pdfPath.absoluteString)")
+        } else {
+            print("error to write a pdf to  \(pdfPath.absoluteString)!")
+        }
+        
+        // send email with pdf
+        if MFMailComposeViewController.canSendMail() {
+           let mail = MFMailComposeViewController()
+           mail.setSubject("Report")
+           mail.mailComposeDelegate = self
+            
+           //add attachment
+            if let data = NSData(contentsOf: pdfPath) {
+                mail.addAttachmentData(data as Data, mimeType: "application/pdf" , fileName: "report.pdf")
+            }
+ 
+            present(mail, animated: true)
+        } else {
+           print("Email cannot be sent")
+        }
     }
     
     
@@ -78,6 +179,13 @@ class ReportVC: UIViewController {
         UserDefaults.standard.synchronize()
         
         tableView.reloadData()
+    }
+}
+
+// MARK: -
+extension ReportVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
