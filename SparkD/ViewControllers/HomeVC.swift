@@ -90,7 +90,7 @@ class HomeVC: UIViewController {
         reportView.addSubview(lblName)
         
         let lblState = UILabel(frame: CGRect(x: 72, y: 37, width: 92, height: 21))
-        lblState.text = "Good"
+        lblState.text = ((report["average"] as! Double) > 30 ? "Good" : "Insufficient")
         lblState.textColor = .systemBlue
         lblState.font = UIFont.systemFont(ofSize: 13)
         reportView.addSubview(lblState)
@@ -353,10 +353,10 @@ extension HomeVC: SCRecorderDelegate {
     
     func detectImage(image: UIImage) {
         // process detecting image
-        self.oldSlTestingView.mainProcess(image, true, Int32(captureCount))
+        guard let img = self.oldSlTestingView.mainProcess(image, true, Int32(captureCount)) else { return }
         
         // show images
-        capturedImageView!.image = image
+        capturedImageView!.image = img
         capturedImageView!.isHidden = false
         
         // show step
@@ -389,8 +389,17 @@ extension HomeVC: SCRecorderDelegate {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
                 var report = ReportItem()
                 
-                // for testing
+                // create report data
                 report.title = alert.textFields![0].text!
+                
+                let solver1 = GlobalHelper.getSolver1()
+                let solver2 = GlobalHelper.getSolver2()
+                
+                report.result1 = (solver1[0] + solver2[0]) / 2
+                report.result2 = (solver1[1] + solver2[1]) / 2
+                report.result3 = (solver1[2] + solver2[2]) / 2
+                report.result4 = (solver2[0] + solver2[1] + solver2[2]) / 3
+                report.average = (report.result1 + report.result2 + report.result3 + report.result4) / 4
                 
                 ProgressHUD.show()
                 

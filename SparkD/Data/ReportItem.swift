@@ -31,9 +31,9 @@ struct ReportItem {
                 "result2": result2,
                 "result3": result3,
                 "result4": result4,
-                "url1": url1,
-                "url2": url2,
-                "url3": url3,
+                "pictureUrl1": url1,
+                "pictureUrl2": url2,
+                "pictureUrl3": url3,
                 "average": average,
                 "selected": selected]
     }

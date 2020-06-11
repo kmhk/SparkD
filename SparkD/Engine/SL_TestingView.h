@@ -22,5 +22,5 @@
 }
 
 
--(void) MainProcess:(UIImage *)imgSrc :(bool) bFlip :(int) imageCount;
+-(UIImage *) MainProcess:(UIImage *)imgSrc :(bool) bFlip :(int) imageCount;
 @end

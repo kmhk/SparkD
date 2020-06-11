@@ -108,6 +108,9 @@ var dbOrder = [Double](repeating: 0.0, count: maxColumns * maxRows)
 var bDetection = false
 var nOrder = 3
 
+var gResult1 = [Double]()
+var gResult2 = [Double]()
+
 func generateStrip(strip: StripType) -> StripData {
     var data = StripData()
     
@@ -162,6 +165,15 @@ func configureNominal(for stripe: StripType) -> [[Double]] {
 
 
 class GlobalHelper: NSObject {
+    
+    @objc class func getSolver1() -> [Double] {
+        return gResult1
+    }
+    
+    @objc class func getSolver2() -> [Double] {
+        return gResult2
+    }
+    
     @objc class func fill(solver1: [Double], solver2: [Double]) {
         for value in solver1 {
             if value > 0 {
@@ -180,6 +192,9 @@ class GlobalHelper: NSObject {
     @objc class func fill(solver3: Double, solver4:Double) {
            nResult.solver3Value = solver3
            nResult.solver4Value = solver4
+        
+        gResult1.append(solver3)
+        gResult2.append(solver4)
        }
     
     
@@ -198,10 +213,11 @@ class GlobalHelper: NSObject {
     
     @objc class func fill(refPatternLocation: [String: Int]) {
         //       nResult.mainPatternLocation = refPatternXY
+        gResult1 = [Double]()
+        gResult2 = [Double]()
     }
     
     class func fill(nPattern: [Int]) {
-        
     }
     
     @objc class func getCurrentSelectedStripe() -> Int {

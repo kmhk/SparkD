@@ -118,12 +118,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 #define FIXED_SIZE 900
 
--(void) MainProcess:(UIImage *)imgSrc :(bool)bFlip :(int) imageCount
+-(UIImage *) MainProcess:(UIImage *)imgSrc :(bool)bFlip :(int) imageCount
 {
+    if (imageCount == 0) {
+        [GlobalHelper fillWithRefPatternLocation:NULL];
+    }
+    
     cvlib::Mat *pMatSrc;
     pMatSrc = UIImage2Mat(imgSrc);
     if (pMatSrc == NULL)
-        return;
+        return NULL;
     if (bFlip)
         pMatSrc->flipLR();
 
@@ -191,6 +195,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
     // TODO: Display Image rotateSrc in main App  [self displayImage: Mat2UIImage(rotateSrc)];
     // TODO: display Alert message somethign like
+    UIImage * image = Mat2UIImage(rotateSrc);
+    return image;
  /*   if (m_bDetectOk == false)
     {
         [self showMessage:@"Cannot Detect the Image!"

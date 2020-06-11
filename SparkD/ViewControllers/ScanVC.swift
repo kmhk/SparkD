@@ -45,7 +45,7 @@ class ScanVC: UIViewController {
         super.viewDidAppear(animated)
         
         // animate ring
-        ring!.startProgress(to: 70, duration: 1.5) {
+        ring!.startProgress(to: CGFloat(reportData!.average), duration: 1.5) {
 
         }
     }
@@ -98,7 +98,7 @@ class ScanVC: UIViewController {
         let lblStatus = UILabel(frame: viewStatus.bounds)
         lblStatus.font = UIFont.systemFont(ofSize: 13)
         lblStatus.textAlignment = .center
-        lblStatus.text = "Good" //"Insufficient"
+        lblStatus.text = (reportData!.average > 30 ? "Good" : "Insufficient")
         lblStatus.textColor = .white
         viewStatus.addSubview(lblStatus)
     }

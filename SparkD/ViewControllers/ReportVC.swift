@@ -104,7 +104,7 @@ class ReportVC: UIViewController {
             pdfView.addSubview(lblResult)
             
             let lblValue = UILabel(frame: CGRect(x: 20, y: 245, width: view.frame.width - 40, height: 40))
-            lblValue.text = "Vitamin-D (D2+D3), Total(1):     50.38 ng/ml"
+            lblValue.text = String(format:"Vitamin-D (D2+D3), Total(1):     %.2f ng/ml", (dict["average"] as! Double))
             lblValue.font = UIFont.systemFont(ofSize: 15)
             pdfView.addSubview(lblValue)
             
@@ -206,7 +206,7 @@ extension ReportVC: UITableViewDataSource, UITableViewDelegate {
         
         cell.lblResult.text = String(format: "%.f", report["average"] as! Double)
         cell.lblName.text = report["title"] as? String
-        cell.lblState.text = "Good"
+        cell.lblState.text = ((report["average"] as! Double) > 30 ? "Good" : "Insufficient")
         
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM, yyyy"
