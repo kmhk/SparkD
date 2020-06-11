@@ -26,6 +26,8 @@ class HomeVC: UIViewController {
     @IBOutlet weak var timerContainer: UIView!
     @IBOutlet weak var reportContainer: UIView!
     
+    let oldSlTestingView = SL_TestingView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -351,6 +353,9 @@ extension HomeVC: SCRecorderDelegate {
     
     func detectImage(image: UIImage) {
         // process detecting image
+        self.oldSlTestingView.mainProcess(image, true, Int32(captureCount))
+        
+        // show images
         capturedImageView!.image = image
         capturedImageView!.isHidden = false
         
@@ -371,6 +376,7 @@ extension HomeVC: SCRecorderDelegate {
     
     @objc func btnNextTapped(_ sender: Any) {
         captureCount += 1
+        
         if captureCount >= 3 {
             // show report screen
             

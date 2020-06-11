@@ -1,0 +1,22 @@
+﻿  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  gzclose.c
+  gzlib.c
+  gzread.c
+  gzwrite.c
+  infback.c
+  inffast.c
+  inflate.c
+  inftrees.c
+  trees.c
+  uncompr.c
+  zutil.c
+  Generating Code...
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1189,5): warning MSB8012: TargetPath(E:\KCUWork\cvlib2_vs2015_161024\modules\cvlibbase\Src\png\projects\visualc71\.\Win32_DLL_Debug\ZLib\zlib.dll) does not match the Linker's OutputFile property value (E:\KCUWork\cvlib2_vs2015_161024\modules\cvlibbase\Src\png\projects\visualc71\Win32_DLL_Debug\ZLib\zlib1d.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1191,5): warning MSB8012: TargetName(zlib) does not match the Linker's OutputFile property value (zlib1d). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+adler32.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+     Creating library .\Win32_DLL_Debug\ZLib\zlib.lib and object .\Win32_DLL_Debug\ZLib\zlib.exp
+  zlib.vcxproj -> E:\KCUWork\cvlib2_vs2015_161024\modules\cvlibbase\Src\png\projects\visualc71\.\Win32_DLL_Debug\ZLib\zlib.dll
+  zlib.vcxproj -> .\Win32_DLL_Debug\ZLib\zlib.pdb (Full PDB)

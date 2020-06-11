@@ -1,0 +1,131 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: tiff - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP46.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\zlib" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "_AFXDLL" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\fax3sm_winnt.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_aux.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_close.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_codec.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_compress.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_dir.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_dirinfo.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_dirread.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_dirwrite.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_dumpmode.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_error.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_fax3.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_flush.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_getimage.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_jpeg.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_luv.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_lzw.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_next.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_ojpeg.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_open.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_packbits.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_pixarlog.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_predict.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_print.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_read.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_strip.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_swab.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_thunder.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_tile.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_version.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_warning.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_write.c"
+"F:\KCUWork\Work\CVLibDevTool_src_110525\cvlibbase\Src\Other\tiff\tif_zip.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP46.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP47.tmp" with contents
+[
+/nologo /out:"..\..\..\lib\Tiffd.lib" 
+.\Debug\fax3sm_winnt.obj
+.\Debug\tif_aux.obj
+.\Debug\tif_close.obj
+.\Debug\tif_codec.obj
+.\Debug\tif_compress.obj
+.\Debug\tif_dir.obj
+.\Debug\tif_dirinfo.obj
+.\Debug\tif_dirread.obj
+.\Debug\tif_dirwrite.obj
+.\Debug\tif_dumpmode.obj
+.\Debug\tif_error.obj
+.\Debug\tif_fax3.obj
+.\Debug\tif_flush.obj
+.\Debug\tif_getimage.obj
+.\Debug\tif_jpeg.obj
+.\Debug\tif_luv.obj
+.\Debug\tif_lzw.obj
+.\Debug\tif_next.obj
+.\Debug\tif_ojpeg.obj
+.\Debug\tif_open.obj
+.\Debug\tif_packbits.obj
+.\Debug\tif_pixarlog.obj
+.\Debug\tif_predict.obj
+.\Debug\tif_print.obj
+.\Debug\tif_read.obj
+.\Debug\tif_strip.obj
+.\Debug\tif_swab.obj
+.\Debug\tif_thunder.obj
+.\Debug\tif_tile.obj
+.\Debug\tif_version.obj
+.\Debug\tif_warning.obj
+.\Debug\tif_write.obj
+.\Debug\tif_zip.obj
+]
+Creating command line "link.exe -lib @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP47.tmp"
+<h3>Output Window</h3>
+Compiling...
+fax3sm_winnt.c
+tif_aux.c
+tif_close.c
+tif_codec.c
+tif_compress.c
+tif_dir.c
+tif_dirinfo.c
+tif_dirread.c
+tif_dirwrite.c
+tif_dumpmode.c
+tif_error.c
+tif_fax3.c
+tif_flush.c
+tif_getimage.c
+tif_jpeg.c
+tif_luv.c
+tif_lzw.c
+tif_next.c
+tif_ojpeg.c
+tif_open.c
+Generating Code...
+Compiling...
+tif_packbits.c
+tif_pixarlog.c
+tif_predict.c
+tif_print.c
+tif_read.c
+tif_strip.c
+tif_swab.c
+tif_thunder.c
+tif_tile.c
+tif_version.c
+tif_warning.c
+tif_write.c
+tif_zip.c
+Generating Code...
+Creating library...
+
+
+
+<h3>Results</h3>
+Tiffd.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -12,5 +12,6 @@ target 'SparkD' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'ProgressHUD'
+  pod 'VIPhotoView', '~> 0.1'
 
 end
