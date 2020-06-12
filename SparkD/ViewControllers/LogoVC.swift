@@ -8,6 +8,30 @@
 
 import UIKit
 import TOPasscodeViewController
+import SwiftyGif
+
+class AnimationView: UIView {
+    var gifView: UIImageView = {
+        guard let gifImage = try? UIImage(gifName: "sparkgif.gif") else { return UIImageView() }
+        
+        return UIImageView(gifImage: gifImage, loopCount: 1)
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.backgroundColor = .white
+        
+        gifView.frame = CGRect(x: 0, y: 0, width: 150, height: 150)
+        gifView.center = self.center
+        print("\(gifView.frame)")
+        addSubview(gifView)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+}
 
 class LogoVC: UIViewController {
 
@@ -16,11 +40,14 @@ class LogoVC: UIViewController {
     
     @IBOutlet weak var lblNote: UILabel!
     
+    let logoView = AnimationView(frame: UIScreen.main.bounds)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        view.addSubview(logoView)
+        logoView.gifView.delegate = self
     }
     
     
@@ -38,6 +65,12 @@ class LogoVC: UIViewController {
                                                           NSAttributedString.Key.foregroundColor: UIColor.purple])
         str1.append(str2)
         lblNote.attributedText = str1
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        logoView.gifView.startAnimatingGif()
     }
     
 
@@ -70,6 +103,14 @@ class LogoVC: UIViewController {
         present(vc, animated: true, completion: nil)
     }
     
+}
+
+
+// MARK: -
+extension LogoVC: SwiftyGifDelegate {
+    func gifDidStop(sender: UIImageView) {
+        logoView.isHidden = true
+    }
 }
 
 

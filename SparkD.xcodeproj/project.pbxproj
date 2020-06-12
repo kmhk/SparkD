@@ -163,6 +163,8 @@
 		F33E35912492ABCE0016E6C1 /* ReportItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33E35902492ABCD0016E6C1 /* ReportItem.swift */; };
 		F33E35932492ABD80016E6C1 /* ReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33E35922492ABD80016E6C1 /* ReportTableViewCell.swift */; };
 		F33E35952492ABFB0016E6C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F33E35942492ABFB0016E6C1 /* GoogleService-Info.plist */; };
+		F39EE3E42493DC57001FD067 /* GifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39EE3E32493DC57001FD067 /* GifImage.swift */; };
+		F39EE3E62493DCE5001FD067 /* sparkgif.gif in Resources */ = {isa = PBXBuildFile; fileRef = F39EE3E52493DCE5001FD067 /* sparkgif.gif */; };
 		F3EAB65A248A03BE000A23B5 /* AddTimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAB659248A03BE000A23B5 /* AddTimerController.swift */; };
 		F3EDA6E924873AC0004425C3 /* LogoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EDA6E824873AC0004425C3 /* LogoVC.swift */; };
 		F3F6428324813A5700282EDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F6428224813A5700282EDC /* AppDelegate.swift */; };
@@ -465,6 +467,8 @@
 		F33E35902492ABCD0016E6C1 /* ReportItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportItem.swift; sourceTree = "<group>"; };
 		F33E35922492ABD80016E6C1 /* ReportTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportTableViewCell.swift; sourceTree = "<group>"; };
 		F33E35942492ABFB0016E6C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F39EE3E32493DC57001FD067 /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
+		F39EE3E52493DCE5001FD067 /* sparkgif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = sparkgif.gif; sourceTree = "<group>"; };
 		F3EAB659248A03BE000A23B5 /* AddTimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTimerController.swift; sourceTree = "<group>"; };
 		F3EDA6E824873AC0004425C3 /* LogoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoVC.swift; sourceTree = "<group>"; };
 		F3F6427F24813A5700282EDC /* SparkD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -888,6 +892,7 @@
 				F3315D62248891DE00867A9F /* NavigationController.swift */,
 				F3315D6E2488985700867A9F /* Button.swift */,
 				F3315D732488A9B300867A9F /* View.swift */,
+				F39EE3E32493DC57001FD067 /* GifImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -959,6 +964,7 @@
 				F3315D5E24881E7100867A9F /* ViewControllers */,
 				F3F6428224813A5700282EDC /* AppDelegate.swift */,
 				F3F6428424813A5700282EDC /* SceneDelegate.swift */,
+				F39EE3E52493DCE5001FD067 /* sparkgif.gif */,
 				F33E35942492ABFB0016E6C1 /* GoogleService-Info.plist */,
 				F3F6428824813A5700282EDC /* Main.storyboard */,
 				F3F6428B24813A5C00282EDC /* Assets.xcassets */,
@@ -1029,6 +1035,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F39EE3E62493DCE5001FD067 /* sparkgif.gif in Resources */,
 				F3F6428C24813A5C00282EDC /* Assets.xcassets in Resources */,
 				F33E35952492ABFB0016E6C1 /* GoogleService-Info.plist in Resources */,
 				D3A79665248EC09E00381033 /* Main.storyboard in Resources */,
@@ -1149,6 +1156,7 @@
 				D30A8511248CAB0500B7F472 /* global.swift in Sources */,
 				D356D1382492784A00C7C1EB /* FindSquares.cpp in Sources */,
 				D356CCFA2492781B00C7C1EB /* CholeskyDecomposition.cpp in Sources */,
+				F39EE3E42493DC57001FD067 /* GifImage.swift in Sources */,
 				D356D12C2492784A00C7C1EB /* Warping.cpp in Sources */,
 				D356CBFC2492781B00C7C1EB /* PtrList.cpp in Sources */,
 				F3315D6124888BC800867A9F /* MainNavVC.swift in Sources */,
