@@ -132,7 +132,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.7925814267816178" blue="0.74933120951183763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="GWl-Q6-CB3"/>
                     </view>
                     <navigationItem key="navigationItem" id="sz9-Tn-wGW"/>
