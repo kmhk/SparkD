@@ -109,7 +109,20 @@ class LogoVC: UIViewController {
 // MARK: -
 extension LogoVC: SwiftyGifDelegate {
     func gifDidStop(sender: UIImageView) {
-        logoView.isHidden = true
+        if let notFirstRun = UserDefaults.standard.value(forKey: "start running") {
+            self.logoView.isHidden = true
+            return
+        }
+        
+        UserDefaults.standard.setValue(true, forKey: "start running")
+        UserDefaults.standard.synchronize()
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "IntroVC") as! IntroVC
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false) {
+            self.logoView.isHidden = true
+        }
     }
 }
 

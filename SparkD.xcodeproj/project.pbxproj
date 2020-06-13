@@ -165,6 +165,8 @@
 		F33E35952492ABFB0016E6C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F33E35942492ABFB0016E6C1 /* GoogleService-Info.plist */; };
 		F39EE3E42493DC57001FD067 /* GifImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39EE3E32493DC57001FD067 /* GifImage.swift */; };
 		F39EE3E62493DCE5001FD067 /* sparkgif.gif in Resources */ = {isa = PBXBuildFile; fileRef = F39EE3E52493DCE5001FD067 /* sparkgif.gif */; };
+		F39EE3E8249502E0001FD067 /* IntroVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39EE3E7249502E0001FD067 /* IntroVC.swift */; };
+		F39EE3EA24950310001FD067 /* IntroCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39EE3E924950310001FD067 /* IntroCollectionCell.swift */; };
 		F3EAB65A248A03BE000A23B5 /* AddTimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAB659248A03BE000A23B5 /* AddTimerController.swift */; };
 		F3EDA6E924873AC0004425C3 /* LogoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EDA6E824873AC0004425C3 /* LogoVC.swift */; };
 		F3F6428324813A5700282EDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F6428224813A5700282EDC /* AppDelegate.swift */; };
@@ -469,6 +471,8 @@
 		F33E35942492ABFB0016E6C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F39EE3E32493DC57001FD067 /* GifImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifImage.swift; sourceTree = "<group>"; };
 		F39EE3E52493DCE5001FD067 /* sparkgif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = sparkgif.gif; sourceTree = "<group>"; };
+		F39EE3E7249502E0001FD067 /* IntroVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroVC.swift; sourceTree = "<group>"; };
+		F39EE3E924950310001FD067 /* IntroCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroCollectionCell.swift; sourceTree = "<group>"; };
 		F3EAB659248A03BE000A23B5 /* AddTimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTimerController.swift; sourceTree = "<group>"; };
 		F3EDA6E824873AC0004425C3 /* LogoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoVC.swift; sourceTree = "<group>"; };
 		F3F6427F24813A5700282EDC /* SparkD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SparkD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -882,6 +886,7 @@
 				F3315D6A248895CC00867A9F /* ReportVC.swift */,
 				F3315D6C248895DA00867A9F /* SettingVC.swift */,
 				F321861B248B39E400FC6EC9 /* ScanVC.swift */,
+				F39EE3E7249502E0001FD067 /* IntroVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -905,6 +910,7 @@
 				F3315D7124889BE500867A9F /* TestProcedureCollectionViewCell.swift */,
 				F3315D7B2489364A00867A9F /* TPDetailCollectionCell.swift */,
 				F3EAB659248A03BE000A23B5 /* AddTimerController.swift */,
+				F39EE3E924950310001FD067 /* IntroCollectionCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1097,6 +1103,7 @@
 				F3315D742488A9B300867A9F /* View.swift in Sources */,
 				D356CFB22492781C00C7C1EB /* IPDebug.cpp in Sources */,
 				D356CC222492781B00C7C1EB /* BitOperation.cpp in Sources */,
+				F39EE3E8249502E0001FD067 /* IntroVC.swift in Sources */,
 				D356CFA02492781C00C7C1EB /* PtrArray.cpp in Sources */,
 				D356D1472492784A00C7C1EB /* GaussianFilter.cpp in Sources */,
 				D356CC032492781B00C7C1EB /* CoImageJPG.cpp in Sources */,
@@ -1179,6 +1186,7 @@
 				D356D1252492784A00C7C1EB /* IntegralImage.cpp in Sources */,
 				D356CC002492781B00C7C1EB /* CoImageBMP.cpp in Sources */,
 				D356D1122492784A00C7C1EB /* connectedComponent_c.cpp in Sources */,
+				F39EE3EA24950310001FD067 /* IntroCollectionCell.swift in Sources */,
 				D356CFAA2492781C00C7C1EB /* Mat.cpp in Sources */,
 				D356D11E2492784A00C7C1EB /* Morphology.cpp in Sources */,
 				D356D1342492784A00C7C1EB /* ipMedian.cpp in Sources */,

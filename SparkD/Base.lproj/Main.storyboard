@@ -9,6 +9,87 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--IntroVC-->
+        <scene sceneID="CPc-IV-Cc3">
+            <objects>
+                <viewController storyboardIdentifier="IntroVC" id="ey2-lb-EQa" customClass="IntroVC" customModule="SparkD" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="U48-yL-O4v">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJI-QD-WDP">
+                                <rect key="frame" x="158" y="563" width="60" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="btnNext:" destination="ey2-lb-EQa" eventType="touchUpInside" id="fKG-Qd-6EG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IQy-Eu-ndM">
+                                <rect key="frame" x="158" y="705" width="60" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="btnSkip:" destination="ey2-lb-EQa" eventType="touchUpInside" id="g6G-9I-0eg"/>
+                                </connections>
+                            </button>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7pL-YH-XKm">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="456"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oGN-Ud-TIB">
+                                    <size key="itemSize" width="375" height="406"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="IntroCollectionCell" id="Evg-wg-UiJ" customClass="IntroCollectionCell" customModule="SparkD" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="406"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="CaV-Zr-Iss">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="406"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="intro0" translatesAutoresizingMaskIntoConstraints="NO" id="Max-Te-T4I">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="294"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hjT-lQ-khP">
+                                                    <rect key="frame" x="0.0" y="302" width="375" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="375" height="406"/>
+                                        <connections>
+                                            <outlet property="imgBack" destination="Max-Te-T4I" id="e0p-M7-l9W"/>
+                                            <outlet property="lblNote" destination="hjT-lQ-khP" id="irE-BH-cF4"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="ey2-lb-EQa" id="GRV-6p-zZa"/>
+                                    <outlet property="delegate" destination="ey2-lb-EQa" id="dJt-3a-DA4"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Uiy-b1-hoi"/>
+                    </view>
+                    <connections>
+                        <outlet property="btnNext" destination="KJI-QD-WDP" id="VbX-lh-fnL"/>
+                        <outlet property="btnSkip" destination="IQy-Eu-ndM" id="gUu-gX-er1"/>
+                        <outlet property="collectionView" destination="7pL-YH-XKm" id="faY-Ik-saO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eHY-bq-M24" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-986.39999999999998" y="259.35960591133005"/>
+        </scene>
         <!--LogoVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -780,6 +861,7 @@
         <image name="camera.fill" catalog="system" width="128" height="96"/>
         <image name="doc.text" catalog="system" width="115" height="128"/>
         <image name="house" catalog="system" width="128" height="110"/>
+        <image name="intro0" width="840" height="666"/>
         <image name="lock.circle.fill" catalog="system" width="128" height="121"/>
         <image name="lock.fill" catalog="system" width="128" height="128"/>
         <image name="questionmark.circle.fill" catalog="system" width="128" height="121"/>
