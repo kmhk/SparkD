@@ -12,13 +12,26 @@ import Firebase
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (flag, error) in
+            print(error as Any)
+        }
+        
+        let act1 = UNNotificationAction(identifier: "scan", title: "Scan", options: [.foreground])
+        let act2 = UNNotificationAction(identifier: "ok", title: "OK", options: [.foreground])
+        let cat = UNNotificationCategory(identifier: "scanNotify", actions: [act1, act2], intentIdentifiers: [], options: [])
+        UNUserNotificationCenter.current().setNotificationCategories([cat])
+        
         return true
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     // MARK: UISceneSession Lifecycle
@@ -39,4 +52,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-

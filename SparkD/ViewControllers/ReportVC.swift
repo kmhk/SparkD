@@ -204,7 +204,7 @@ extension ReportVC: UITableViewDataSource, UITableViewDelegate {
         
         let report = reports[indexPath.row] as! [String: Any]
         
-        cell.lblResult.text = String(format: "%.f", report["average"] as! Double)
+        cell.lblResult.text = String(format: "%.1f", report["average"] as! Double)
         cell.lblName.text = report["title"] as? String
         cell.lblState.text = ((report["average"] as! Double) > 30 ? "Good" : "Insufficient")
         

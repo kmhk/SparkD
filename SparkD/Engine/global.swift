@@ -174,6 +174,10 @@ class GlobalHelper: NSObject {
         return gResult2
     }
     
+    @objc class func getNResult() -> [Int] {
+        return [nResult.testT, nResult.controlC, nResult.betweenCT]
+    }
+    
     @objc class func fill(solver1: [Double], solver2: [Double]) {
         for value in solver1 {
             if value > 0 {

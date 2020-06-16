@@ -40,6 +40,8 @@ class HomeVC: UIViewController {
             
             print("logged in to the firebase successfully!")
         }
+        
+        UNUserNotificationCenter.current().delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,6 +49,9 @@ class HomeVC: UIViewController {
         
         let titleView = navigationController?.navTitleWithImageAndText(titleText: "HOME")
         tabBarController?.navigationItem.titleView = titleView
+        
+        tabBarController?.navigationItem.rightBarButtonItem = nil
+        tabBarController?.navigationItem.leftBarButtonItem = nil
         
         refreshTimers()
         showLastReport()
@@ -65,45 +70,49 @@ class HomeVC: UIViewController {
             return
         }
         
-        report = reports.last as! [String: Any]
+        let cc = (reports.count > 3 ? 3 : reports.count)
         
-        let reportView = UIView(frame: CGRect(x: 8, y: 44, width: view.frame.width - 16, height: 70))
-        reportView.backgroundColor = .white
-        reportView.layer.cornerRadius = 8
-        reportView.clipsToBounds = true
-        reportContainer.addSubview(reportView)
-        
-        let resultView = UILabel(frame: CGRect(x: 8, y: 14, width: 40, height: 40))
-        resultView.layer.borderWidth = 1
-        resultView.layer.borderColor = UIColor.systemBlue.cgColor
-        resultView.layer.cornerRadius = 4
-        resultView.backgroundColor = UIColor.lightGray
-        resultView.clipsToBounds = true
-        resultView.text = String(format: "%.f", report["average"] as! Double)
-        resultView.textAlignment = .center
-        resultView.font = UIFont.boldSystemFont(ofSize: 15)
-        reportView.addSubview(resultView)
-        
-        let lblName = UILabel(frame: CGRect(x: 72, y: 11, width: 256, height: 21))
-        lblName.text = report["title"] as? String
-        lblName.font = UIFont.systemFont(ofSize: 14)
-        reportView.addSubview(lblName)
-        
-        let lblState = UILabel(frame: CGRect(x: 72, y: 37, width: 92, height: 21))
-        lblState.text = ((report["average"] as! Double) > 30 ? "Good" : "Insufficient")
-        lblState.textColor = .systemBlue
-        lblState.font = UIFont.systemFont(ofSize: 13)
-        reportView.addSubview(lblState)
-        
-        let lblDate = UILabel(frame: CGRect(x: 170, y: 37, width: 167, height: 21))
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM, yyyy"
-        let date = Date(timeIntervalSinceNow: report["timestamp"] as! TimeInterval)
-        lblDate.text = formatter.string(from: date)
-        lblDate.textAlignment = .right
-        lblDate.textColor = .gray
-        lblDate.font = UIFont.systemFont(ofSize: 13)
-        reportView.addSubview(lblDate)
+        for index in 0..<cc {
+            report = reports[index] as! [String: Any]
+            
+            let reportView = UIView(frame: CGRect(x: 8, y: 44 + index * 90, width: Int(view.frame.size.width) - 16, height: 70))
+            reportView.backgroundColor = .white
+            reportView.layer.cornerRadius = 8
+            reportView.clipsToBounds = true
+            reportContainer.addSubview(reportView)
+            
+            let resultView = UILabel(frame: CGRect(x: 8, y: 14, width: 40, height: 40))
+            resultView.layer.borderWidth = 1
+            resultView.layer.borderColor = UIColor.systemBlue.cgColor
+            resultView.layer.cornerRadius = 4
+            resultView.backgroundColor = UIColor.lightGray
+            resultView.clipsToBounds = true
+            resultView.text = String(format: "%.1f", report["average"] as! Double)
+            resultView.textAlignment = .center
+            resultView.font = UIFont.boldSystemFont(ofSize: 15)
+            reportView.addSubview(resultView)
+            
+            let lblName = UILabel(frame: CGRect(x: 72, y: 11, width: 256, height: 21))
+            lblName.text = report["title"] as? String
+            lblName.font = UIFont.systemFont(ofSize: 14)
+            reportView.addSubview(lblName)
+            
+            let lblState = UILabel(frame: CGRect(x: 72, y: 37, width: 92, height: 21))
+            lblState.text = ((report["average"] as! Double) > 30 ? "Good" : "Insufficient")
+            lblState.textColor = .systemBlue
+            lblState.font = UIFont.systemFont(ofSize: 13)
+            reportView.addSubview(lblState)
+            
+            let lblDate = UILabel(frame: CGRect(x: 170, y: 37, width: 167, height: 21))
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd MMM, yyyy"
+            let date = Date(timeIntervalSinceNow: report["timestamp"] as! TimeInterval)
+            lblDate.text = formatter.string(from: date)
+            lblDate.textAlignment = .right
+            lblDate.textColor = .gray
+            lblDate.font = UIFont.systemFont(ofSize: 13)
+            reportView.addSubview(lblDate)
+        }
     }
     
     func refreshTimers() {
@@ -257,6 +266,20 @@ class HomeVC: UIViewController {
     
 }
 
+
+// MARK: -
+extension HomeVC: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if response.actionIdentifier == "scan" {
+            showCamera()
+        }
+    }
+}
+
+
 // MARK: -
 extension HomeVC: SCRecorderDelegate {
     func showCamera() {
@@ -353,7 +376,7 @@ extension HomeVC: SCRecorderDelegate {
     
     func detectImage(image: UIImage) {
         // process detecting image
-        guard let img = self.oldSlTestingView.mainProcess(image, true, Int32(captureCount)) else { return }
+        guard let img = self.oldSlTestingView.mainProcess(image, false, Int32(captureCount)) else { return }
         
         // show images
         capturedImageView!.image = img

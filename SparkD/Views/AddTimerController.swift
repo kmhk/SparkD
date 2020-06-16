@@ -102,9 +102,27 @@ class AddTimerController: UIAlertController {
             
             array.append(timerDict as Any)
             
+            // save to context
             UserDefaults.standard.setValue(curDate, forKey: "last timer")
             UserDefaults.standard.setValue(array, forKey: "timers")
             UserDefaults.standard.synchronize()
+            
+            // add local notification
+            let content = UNMutableNotificationContent()
+            content.title = "Alarm"
+            content.body = name
+            content.sound = UNNotificationSound.default
+            content.badge = 1
+            content.categoryIdentifier = "scanNotify"
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 15 * 60, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: "Local Notification", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request) { (error) in
+                if let error = error {
+                    print("Error on local notification with error: \(error.localizedDescription)")
+                }
+            }
             
             if vc.handler != nil {
                 vc.handler!()

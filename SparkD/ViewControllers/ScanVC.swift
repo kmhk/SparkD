@@ -115,7 +115,8 @@ class ScanVC: UIViewController {
             reportArray = tmp as! [Any]
         }
         
-        reportArray.append(reportData!.getDict())
+        //reportArray.append(reportData!.getDict())
+        reportArray.insert(reportData!.getDict(), at: 0)
         
         UserDefaults.standard.setValue(reportArray, forKey: "ReportArray")
         UserDefaults.standard.synchronize()

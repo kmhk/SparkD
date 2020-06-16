@@ -99,6 +99,7 @@ class LogoVC: UIViewController {
         }
         
         let vc = TOPasscodeViewController(style: .opaqueLight, passcodeType: .fourDigits)
+        vc.addFogotButton()
         vc.delegate = self
         present(vc, animated: true, completion: nil)
     }
@@ -158,4 +159,25 @@ extension LogoVC: TOPasscodeViewControllerDelegate {
         return false
     }
     
+}
+
+// MARK: -
+extension TOPasscodeViewController {
+    func addFogotButton() {
+        let btn = UIButton(frame: CGRect(x: 20, y: view.frame.height - 60, width: 150, height: 35))
+        btn.setTitle("Forgot Password", for: .normal)
+        btn.setTitleColor(.systemBlue, for: .normal)
+        btn.addTarget(self, action: #selector(btnForgotPwdTapped(_:)), for: .touchUpInside)
+        view.addSubview(btn)
+    }
+    
+    @objc func btnForgotPwdTapped(_ sender: Any) {
+        
+        UserDefaults.standard.set("1234", forKey: "Pin")
+        UserDefaults.standard.synchronize()
+        
+        let alert = UIAlertController(title: nil, message: "Your pin changed to 1234", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }

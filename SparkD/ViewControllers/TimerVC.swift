@@ -18,6 +18,9 @@ class TimerVC: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        let layout = UICollectionViewFlowLayout()
+        collectionView.collectionViewLayout = layout
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -25,6 +28,11 @@ class TimerVC: UIViewController {
         
         let titleView = navigationController?.navTitleWithImageAndText(titleText: "TIMER")
         tabBarController?.navigationItem.titleView = titleView
+        
+        let addBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBtnTapped(_:)))
+        
+        tabBarController?.navigationItem.rightBarButtonItem = addBtn
+        tabBarController?.navigationItem.leftBarButtonItem = nil
         
         refreshTimers()
     }
@@ -38,6 +46,19 @@ class TimerVC: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @objc func addBtnTapped(_ sender: Any) {
+        if let vc = AddTimerController.addTimer() {
+            vc.handler = { () in
+                self.addNewTimer()
+            }
+            present(vc, animated: true, completion: nil)
+        } else {
+            let vc = UIAlertController(title: nil, message: "You can add new timer in 2 mins again", preferredStyle: .alert)
+            vc.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(vc, animated: true, completion: nil)
+        }
+    }
 
     func refreshTimers() {
         if let array = UserDefaults.standard.value(forKey: "timers") {

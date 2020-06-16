@@ -7,8 +7,21 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class SettingVC: UIViewController {
+    
+    var recorder = SCRecorder()
+    
+    var capturedImageView: UIImageView?
+    var btnCapture: UIButton?
+    var btnNext: UIButton?
+    var btnCancel: UIButton?
+    var lblStep: UILabel?
+    
+    var captureCount = 0
+    
+    let oldSlTestingView = SL_TestingView()
 
     @IBOutlet weak var switchActivePin: UISwitch!
     
@@ -25,6 +38,9 @@ class SettingVC: UIViewController {
         
         let titleView = navigationController?.navTitleWithImageAndText(titleText: "SETTING")
         tabBarController?.navigationItem.titleView = titleView
+        
+        tabBarController?.navigationItem.rightBarButtonItem = nil
+        tabBarController?.navigationItem.leftBarButtonItem = nil
         
         if let isActivePin = UserDefaults.standard.value(forKey: "IsActivePin") {
             switchActivePin.isOn = isActivePin as! Bool
@@ -95,6 +111,10 @@ class SettingVC: UIViewController {
     
     
     @IBAction func btnRepeatTestTapped(_ sender: Any) {
+        UserDefaults.standard.setValue(nil, forKey: "TestMode")
+        UserDefaults.standard.synchronize()
+        
+        showCamera()
     }
     
     
@@ -121,5 +141,176 @@ class SettingVC: UIViewController {
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         present(actionSheet, animated: true, completion: nil)
+    }
+}
+
+// MARK: -
+extension SettingVC: SCRecorderDelegate {
+    func showCamera() {
+        captureCount = 0
+        
+        let bkView = UIView(frame: (tabBarController?.navigationController?.view.bounds)!)
+        bkView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+        bkView.tag = 0x1000
+        tabBarController?.navigationController?.view.addSubview(bkView)
+        
+        let containerView = UIView(frame: CGRect(x: 20,
+                                                 y: 60,
+                                                 width: bkView.frame.width - 40,
+                                                 height: bkView.frame.height - 120))
+        containerView.backgroundColor = UIColor.white
+        containerView.layer.cornerRadius = 8
+        containerView.clipsToBounds = true
+        bkView.addSubview(containerView)
+        
+        let btnClose = UIButton(frame: CGRect(x: containerView.frame.width - 45, y: 5, width: 40, height: 40))
+        btnClose.addTarget(self, action: #selector(btnCloseTapped(_:)), for: .touchUpInside)
+        btnClose.setTitle("X", for: .normal)
+        btnClose.setTitleColor(UIColor.darkGray, for: .normal)
+        containerView.addSubview(btnClose)
+        
+        let lblNote = UILabel(frame: CGRect(x: 15, y: 5, width: 50, height: 40))
+        lblNote.text = "Scan"
+        lblNote.font = UIFont.systemFont(ofSize: 14.0)
+        containerView.addSubview(lblNote)
+        
+        let cameraView = UIView(frame: CGRect(x: 40, y: 50, width: containerView.frame.width - 80, height: containerView.frame.height - 180))
+        cameraView.backgroundColor = UIColor.black
+        containerView.addSubview(cameraView)
+        
+        capturedImageView = UIImageView(frame: cameraView.frame)
+        containerView.addSubview(capturedImageView!)
+        capturedImageView!.isHidden = true
+        
+        initRecorder(preview: cameraView)
+        
+        let dashBorder = CAShapeLayer()
+        dashBorder.strokeColor = UIColor.systemBlue.cgColor
+        dashBorder.lineDashPattern = [3, 3]
+        dashBorder.frame = cameraView.bounds
+        dashBorder.fillColor = nil
+        dashBorder.path = UIBezierPath(rect: cameraView.bounds).cgPath
+        cameraView.layer.addSublayer(dashBorder)
+        
+        btnCapture = UIButton(frame: CGRect(x: cameraView.frame.midX - 60, y: containerView.frame.height - 115, width: 120, height: 36))
+        btnCapture!.setAttributedTitle(NSAttributedString(string: "TAKE PICTURE",
+                                                         attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                      NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnCapture!.backgroundColor = UIColor.darkGray
+        btnCapture!.addTarget(self, action: #selector(btnTakePictureTapped(_:)), for: .touchUpInside)
+        containerView.addSubview(btnCapture!)
+        
+        lblStep = UILabel(frame: CGRect(x: cameraView.frame.midX - 36, y: containerView.frame.height - 70, width: 72, height: 30))
+        lblStep!.text = "Step 1/3"
+        lblStep!.textAlignment = .center
+        lblStep!.font = UIFont.systemFont(ofSize: 14.0)
+        containerView.addSubview(lblStep!)
+        
+        btnNext = UIButton(frame: CGRect(x: cameraView.frame.midX - 90, y: containerView.frame.height - 115, width: 85, height: 36))
+        btnNext!.setAttributedTitle(NSAttributedString(string: "NEXT",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                    NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnNext!.backgroundColor = UIColor.darkGray
+        btnNext!.addTarget(self, action: #selector(btnNextTapped(_:)), for: .touchUpInside)
+        btnNext!.isHidden = true
+        containerView.addSubview(btnNext!)
+        
+        btnCancel = UIButton(frame: CGRect(x: cameraView.frame.midX + 5, y: containerView.frame.height - 115, width: 85, height: 36))
+        btnCancel!.setAttributedTitle(NSAttributedString(string: "CANCEL",
+                                                       attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15),
+                                                                    NSAttributedString.Key.foregroundColor: UIColor.white]), for: .normal)
+        btnCancel!.backgroundColor = UIColor.darkGray
+        btnCancel!.addTarget(self, action: #selector(btnCancelTapped(_:)), for: .touchUpInside)
+        btnCancel!.isHidden = true
+        containerView.addSubview(btnCancel!)
+    }
+    
+    func initRecorder(preview: UIView) {
+        recorder.videoConfiguration.size = preview.bounds.size
+        recorder.previewView = preview
+        
+        recorder.captureSessionPreset = SCRecorderTools.bestCaptureSessionPresetCompatibleWithAllDevices()
+        recorder.device = .back
+        recorder.delegate = self
+        
+        recorder.session = SCRecordSession()
+        recorder.session!.fileType = AVFileType.jpg.rawValue
+        recorder.startRunning()
+    }
+    
+    func detectImage(image: UIImage) {
+        // process detecting image
+        guard let img = self.oldSlTestingView.mainProcess(image, false, Int32(captureCount)) else { return }
+        
+        // show images
+        capturedImageView!.image = img
+        capturedImageView!.isHidden = false
+        
+        // show step
+        btnCapture!.isHidden = true
+        btnNext!.isHidden = false
+        btnCancel!.isHidden = false
+        
+        lblStep!.text = String(format: "Step %d/3", captureCount + 1)
+    }
+    
+    // MARK: actions
+    @objc func btnCloseTapped(_ sender: Any) {
+        if let subView = tabBarController?.navigationController?.view.viewWithTag(0x1000) {
+            subView.removeFromSuperview()
+        }
+    }
+    
+    @objc func btnNextTapped(_ sender: Any) {
+        var testArray = [Any]()
+        if let tmp = UserDefaults.standard.value(forKey: "TestMode") {
+            testArray = tmp as! [Any]
+        }
+        
+        let res = GlobalHelper.getNResult()
+        testArray.append(res as Any)
+        
+        UserDefaults.standard.setValue(testArray, forKey: "TestMode")
+        UserDefaults.standard.synchronize()
+        
+        captureCount += 1
+        
+        if captureCount >= 3 {
+            self.btnCloseTapped(sender)
+            return
+        }
+        
+        capturedImageView!.isHidden = true
+        
+        // show step
+        btnCapture!.isHidden = false
+        btnNext!.isHidden = true
+        btnCancel!.isHidden = true
+        
+        lblStep!.text = String(format: "Step %d/3", captureCount + 1)
+    }
+    
+    @objc func btnCancelTapped(_ sender: Any) {
+        capturedImageView!.isHidden = true
+        
+        // show step
+        btnCapture!.isHidden = false
+        btnNext!.isHidden = true
+        btnCancel!.isHidden = true
+        
+        lblStep!.text = String(format: "%d/3", captureCount + 1)
+    }
+    
+    @objc func btnTakePictureTapped(_ sender: Any) {
+        recorder.capturePhoto { (error, image) in
+            guard (error == nil && image != nil) else {
+                print("capture error \(error!.localizedDescription)")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.detectImage(image: image!)
+            }
+        }
     }
 }

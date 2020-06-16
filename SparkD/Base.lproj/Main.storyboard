@@ -755,7 +755,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xBz-aM-PTm">
-                                <rect key="frame" x="0.0" y="405" width="375" height="140"/>
+                                <rect key="frame" x="0.0" y="405" width="375" height="324"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Report" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HPq-qY-v6W">
@@ -850,7 +850,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="hqU-QK-WZ4"/>
+        <segue reference="OAD-Hg-679"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Logo" width="152" height="35"/>

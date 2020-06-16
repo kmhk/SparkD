@@ -38,3 +38,32 @@ struct ReportItem {
                 "selected": selected]
     }
 }
+
+struct TestDominantColor {
+    static func getFirstColors() -> [Int]? {
+        if let tmp = UserDefaults.standard.value(forKey: "TestMode") {
+            let testArray = tmp as! [Any]
+            return testArray[0] as? [Int]
+        }
+        
+        return nil
+    }
+    
+    static func getSecondColors() -> [Int]? {
+        if let tmp = UserDefaults.standard.value(forKey: "TestMode") {
+            let testArray = tmp as! [Any]
+            return testArray[1] as? [Int]
+        }
+        
+        return nil
+    }
+    
+    static func getThirdColors() -> [Int]? {
+        if let tmp = UserDefaults.standard.value(forKey: "TestMode") {
+            let testArray = tmp as! [Any]
+            return testArray[2] as? [Int]
+        }
+        
+        return nil
+    }
+}
