@@ -57,6 +57,20 @@ class HomeVC: UIViewController {
         showLastReport()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if UserDefaults.standard.value(forKey: "TestMode") == nil {
+            let alert = UIAlertController(title: nil, message: "Please test scan first", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: {
+                self.tabBarController?.selectedIndex = 3
+                let vc = self.tabBarController?.selectedViewController as! SettingVC
+                vc.btnRepeatTestTapped(self)
+            })
+        }
+    }
+    
     func showLastReport() {
         var report = [String: Any]()
         
