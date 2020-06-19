@@ -91,11 +91,10 @@ class LogoVC: UIViewController {
     
     
     @IBAction func btnPin(_ sender: Any) {
-        if let isActivePin = UserDefaults.standard.value(forKey: "IsActivePin") {
-            if (isActivePin as! Bool) == false {
-                self.performSegue(withIdentifier: "segueMain", sender: nil)
-                return
-            }
+        let isActivePin = UserDefaults.standard.value(forKey: "IsActivePin")
+        if isActivePin == nil || (isActivePin! as! Bool) == false {
+            self.performSegue(withIdentifier: "segueMain", sender: nil)
+            return
         }
         
         let vc = TOPasscodeViewController(style: .opaqueLight, passcodeType: .fourDigits)
@@ -110,7 +109,7 @@ class LogoVC: UIViewController {
 // MARK: -
 extension LogoVC: SwiftyGifDelegate {
     func gifDidStop(sender: UIImageView) {
-        if let notFirstRun = UserDefaults.standard.value(forKey: "start running") {
+        if UserDefaults.standard.value(forKey: "start running") == nil {
             self.logoView.isHidden = true
             return
         }
