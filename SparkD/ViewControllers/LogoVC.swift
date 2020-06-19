@@ -11,6 +11,7 @@ import TOPasscodeViewController
 import SwiftyGif
 
 class AnimationView: UIView {
+    
     var gifView: UIImageView = {
         guard let gifImage = try? UIImage(gifName: "sparkgif.gif") else { return UIImageView() }
         
@@ -34,6 +35,8 @@ class AnimationView: UIView {
 }
 
 class LogoVC: UIViewController {
+    
+    var mustShowMain = false
 
     @IBOutlet weak var btnStartTest: UIButton!
     @IBOutlet weak var btnPin: UIButton!
@@ -70,7 +73,13 @@ class LogoVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        logoView.gifView.startAnimatingGif()
+        if logoView.isHidden == false {
+            logoView.gifView.startAnimatingGif()
+        }
+        
+        if mustShowMain == true {
+            self.performSegue(withIdentifier: "segueMain", sender: nil)
+        }
     }
     
 
@@ -109,8 +118,11 @@ class LogoVC: UIViewController {
 // MARK: -
 extension LogoVC: SwiftyGifDelegate {
     func gifDidStop(sender: UIImageView) {
-        if UserDefaults.standard.value(forKey: "start running") == nil {
+        mustShowMain = false
+        
+        if UserDefaults.standard.value(forKey: "start running") != nil {
             self.logoView.isHidden = true
+            self.performSegue(withIdentifier: "segueMain", sender: nil)
             return
         }
         
@@ -122,6 +134,11 @@ extension LogoVC: SwiftyGifDelegate {
         vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: false) {
             self.logoView.isHidden = true
+            
+            let isActivePin = UserDefaults.standard.value(forKey: "IsActivePin")
+            if isActivePin == nil || (isActivePin! as! Bool) == false {
+                self.mustShowMain = true
+            }
         }
     }
 }
