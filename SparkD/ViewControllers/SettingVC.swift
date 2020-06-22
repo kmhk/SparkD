@@ -115,6 +115,7 @@ class SettingVC: UIViewController {
         UserDefaults.standard.synchronize()
         
         showCamera()
+        showAlert(0)
     }
     
     
@@ -255,6 +256,24 @@ extension SettingVC: SCRecorderDelegate {
     }
     
     // MARK: actions
+    func showAlert(_ index: Int) {
+        var word = "first"
+        if index == 1 {
+            word = "second"
+        } else if index == 2 {
+            word = "third"
+        }
+        
+        let alert = UIAlertController(title: nil, message: "Please take \(word) picture.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            self.btnCloseTapped(self)
+        }))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @objc func btnCloseTapped(_ sender: Any) {
         if let subView = tabBarController?.navigationController?.view.viewWithTag(0x1000) {
             subView.removeFromSuperview()
@@ -279,6 +298,8 @@ extension SettingVC: SCRecorderDelegate {
             self.btnCloseTapped(sender)
             return
         }
+        
+        self.showAlert(captureCount)
         
         capturedImageView!.isHidden = true
         

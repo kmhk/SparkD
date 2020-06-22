@@ -44,7 +44,7 @@ class IntroVC: UIViewController {
         super.viewWillAppear(animated)
         
         let sz = view.frame.size
-        collectionView.frame = CGRect(x: 0, y: 30, width: sz.width, height: sz.width*666/840+80)
+        collectionView.frame = CGRect(x: 0, y: UIApplication.shared.keyWindow!.safeAreaInsets.top, width: sz.width, height: sz.width*666/840+80)
     }
     
     @IBAction func btnNext(_ sender: Any) {

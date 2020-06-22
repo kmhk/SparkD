@@ -23,6 +23,9 @@ class HomeVC: UIViewController {
     
     var captureCount = 0
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    var allTimers: [Any] = []
+    
     @IBOutlet weak var timerContainer: UIView!
     @IBOutlet weak var reportContainer: UIView!
     
@@ -42,6 +45,9 @@ class HomeVC: UIViewController {
         }
         
         UNUserNotificationCenter.current().delegate = self
+        
+        let layout = UICollectionViewFlowLayout()
+        collectionView!.collectionViewLayout = layout
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -187,23 +193,17 @@ class HomeVC: UIViewController {
     }
     
     func addNewTimer() {
-        for subView in timerContainer.subviews {
-            subView.removeFromSuperview()
-        }
-        
         if let array = UserDefaults.standard.value(forKey: "timers") {
             let timers = array as! [Any]
             
             let count = ((timers.count > 2) ? 2 : timers.count)
             for i in 0..<count {
                 let timerDict = timers[i] as! [String: Any]
-                let timer1 = createNewTimer(timerDict: timerDict, rt: CGRect(x: (timerContainer.frame.height + 15) * CGFloat(i),
-                                                                          y: 0,
-                                                                          width: timerContainer.frame.height,
-                                                                          height: timerContainer.frame.height))
-                timerContainer.addSubview(timer1)
+                allTimers.append(timerDict)
             }
         }
+        
+        collectionView!.reloadData()
     }
     
     func createNewTimer(timerDict: [String: Any], rt: CGRect) -> UIView {
@@ -229,8 +229,10 @@ class HomeVC: UIViewController {
         timerRing.outerRingColor = UIColor.systemPink
         timerRing.startAngle = 270
         timerRing.font = UIFont.systemFont(ofSize: 12)
+        print("start timer ring from \(from) to 900")
         timerRing.startTimer(from: from, to: 15 * 60) { (state) in
             // nothing process
+            print("timer staring animated")
         }
         
         return timer
@@ -495,5 +497,35 @@ extension HomeVC: SCRecorderDelegate {
                 self.detectImage(image: image!)
             }
         }
+    }
+}
+
+// MARK: -
+extension HomeVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        allTimers.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TimerCollectionCell", for: indexPath)
+        
+        if let subView = cell.viewWithTag(0x100) {
+            subView.removeFromSuperview()
+        }
+        
+        let timerDict = allTimers[indexPath.row] as! [String: Any]
+        let timerView = createNewTimer(timerDict: timerDict, rt: CGRect(x: 0, y: 0, width: 80, height: 80))
+        cell.addSubview(timerView)
+        timerView.tag = 0x100
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
 }
